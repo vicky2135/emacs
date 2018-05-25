@@ -1,0 +1,168 @@
+package customer
+
+import (
+	"bitbucket.org/kyc-agent/common/logger"
+	"bitbucket.org/kyc-agent/config"
+	"bitbucket.org/kyc-agent/exceptions"
+	"bitbucket.org/kyc-agent/external/astina"
+	"bitbucket.org/kyc-agent/external/bounty_hunter"
+	"bitbucket.org/kyc-agent/external/phantom"
+	"fmt"
+	"github.com/gin-contrib/sessions"
+)
+
+const (
+	SaveDataToPhantomLogTag      = "logic:customer:SaveDataToPhantom"
+	SaveDataToFalconLogTag       = "logic:customer:SaveDataToFalcon"
+	SaveDataToBountyHunterLogTag = "logoic:customer:SaveDataToBountyHunter"
+)
+
+// function to save data to phantom
+func (kycData *KYCData) SaveDataToPhantom(requestId string) *exceptions.ErrorResponse {
+
+	data := kycData.customerData
+	logger.Info(SaveDataToPhantomLogTag, fmt.Sprintf("start to save customer data to phantom, requestId:", requestId))
+
+	emailAddress := fetchEmail(kycData.AstinaData.EmailIDs)
+
+	phantomData := &phantom.SaveCustomerDataRequest{
+		Ovoid:                   data.OVOID,
+		Branchcodeopening:       data.BranchCodeOpening,
+		Customername:            data.CustomerName,
+		Customernickname:        data.CustomerName,
+		Npwp:                    data.NPWPNumber,
+		Phoneno:                 kycData.AstinaData.Mobile,
+		Bupro:                   config.Config.Phantom.Bupro,
+		Income:                  data.IncomeSource,
+		Sex:                     data.Sex,
+		Bigp:                    config.Config.Phantom.Bigp,
+		Bornplace:               data.Birthplace,
+		Borndate:                data.BirthdayString,
+		Mothername:              data.MotherMaidenName,
+		Ktpnumber:               data.IDCardNumber,
+		Nationality:             "Y",
+		Countrycode:             "ID",
+		Kimsno:                  config.Config.Phantom.KIMSNo,
+		Religion:                data.Religion,
+		Job:                     data.WorkTitle,
+		Maritalstatus:           data.MarriageStatus,
+		Bupkr:                   data.WorkField,
+		Ktpaddress:              data.Address,
+		Ktpcity:                 data.City,
+		Ktpstate:                data.Province,
+		Ktpkecamatan:            data.District,
+		Ktpkelurahan:            data.Village,
+		Locationcodebi:          data.LocationCode,
+		Homeownership:           true,
+		Addresstype:             "5",
+		Email:                   emailAddress,
+		Ktprt:                   data.RTNumber,
+		Ktprw:                   data.RWNumber,
+		Sourceoffunding:         data.IncomeSource,
+		Purposeoffund:           data.AccountPurpose,
+		Estimateddebetamt:       data.ExpenseMonthly,
+		Estimatedcreditamt:      data.IncomeMonthlyRange,
+		Estimatedtotaldebetamt:  "2",
+		Estimatedtotalcreditamt: "2",
+		Idexpireddate:           data.IDCardExpiryDate,
+	}
+
+	err := phantom.SaveCustomerData(phantomData, requestId)
+
+	if err != nil {
+		return exceptions.TransformSDKErrorToKYCError(err)
+	}
+
+	logger.Info(SaveDataToPhantomLogTag, fmt.Sprintf("successfully uploaded data to phantom, requestId:%s"), fmt.Sprint("+%v", phantomData))
+	return nil
+}
+
+// function to save customer docs to falcon
+func (kycData *KYCData) SaveDataToFalcon(requestId string) *exceptions.ErrorResponse {
+
+	// uploading docs to falcon
+	data := kycData.customerData
+	logger.Info(SaveDataToFalconLogTag, fmt.Sprintf("uploading docs to falcon initiated, requestId:%s", requestId))
+
+	docs := []docsImage{}
+
+	if len(data.IDCardPictureBase64) > 0 {
+		docs = append(docs, docsImage{fileName: ktpImageName, file: data.IDCardPictureBase64})
+	}
+
+	if len(data.NPWPPictureBase64) > 0 {
+		docs = append(docs, docsImage{fileName: npwpImageName, file: data.NPWPPictureBase64})
+	}
+
+	if len(data.SelfiePictureBase64) > 0 {
+		docs = append(docs, docsImage{fileName: selfieImageName, file: data.SelfiePictureBase64})
+	}
+
+	if len(data.SignPictureBase64) > 0 {
+		docs = append(docs, docsImage{fileName: signImageName, file: data.SignPictureBase64})
+	}
+
+	err := uploadZippedPictures(data.OVOID, docs, requestId)
+
+	logger.Info(SaveDataToFalconLogTag, fmt.Sprintf("uploading docs to falcon finished, requestId:%s", requestId))
+	return err
+}
+
+// func to update agent report
+func (kycData *KYCData) SaveDataToBountyHunter(requestId string) (*bounty_hunter.AgentReportResponse, *exceptions.ErrorResponse) {
+
+	data := kycData.customerData
+	logger.Info(SaveDataToBountyHunterLogTag, fmt.Sprintf("updating agent report, requestId:%s", requestId))
+
+	bountyHunterSaveErr := &exceptions.ErrorResponse{}
+
+	agentID, ok := sessions.Default(kycData.context).Get("id").(string)
+
+	if !ok {
+		logger.Info(SaveDataToBountyHunterLogTag, "error fetching agent id")
+		bountyHunterSaveErr.Build(exceptions.SessionReadErrCdde)
+		return nil, bountyHunterSaveErr
+	}
+
+	agentName, ok := sessions.Default(kycData.context).Get("name").(string)
+
+	if !ok {
+		logger.Info(SaveDataToBountyHunterLogTag, fmt.Sprintf("error fetching agent name, requestId:%s", requestId))
+		bountyHunterSaveErr.Build(exceptions.SessionReadErrCdde)
+		return nil, bountyHunterSaveErr
+	}
+
+	emailAddress := fetchEmail(kycData.AstinaData.EmailIDs)
+	agentReport := &bounty_hunter.AgentReport{
+		Mobile:       kycData.AstinaData.Mobile,
+		Email:        emailAddress,
+		CustomerName: data.CustomerName,
+		OvoId:        data.OVOID,
+		BankerName:   agentName,
+		BankerId:     agentID,
+		Status:       "SAVING_REGISTER_COMPLETED",
+		Reason:       "SUCCESS",
+	}
+
+	response, Bherr := bounty_hunter.UpdateAgentReport(agentReport, requestId)
+
+	if Bherr != nil {
+		return nil, exceptions.TransformSDKErrorToKYCError(Bherr)
+	}
+
+	return response, nil
+
+}
+
+func fetchEmail(emailList []*astina.Email) string {
+
+	var emailAddress string
+	for _, email := range emailList {
+		if email.Status == emailStatusEnabled {
+			emailAddress = email.Address
+		}
+
+	}
+
+	return emailAddress
+}

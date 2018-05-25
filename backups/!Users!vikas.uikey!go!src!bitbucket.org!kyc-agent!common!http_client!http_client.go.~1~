@@ -1,0 +1,215 @@
+package http_client
+
+import (
+	"encoding/json"
+	"fmt"
+	"github.com/go-resty/resty"
+	"net"
+	"net/http"
+	"time"
+	"bitbucket.org/kyc-agent/common/logger"
+)
+
+const (
+	MaxIdleConnsPerHost = 1000
+)
+
+const (
+	getRequestLogTag = "http_client:get"
+	postRequestLogTag = "http_client:post"
+	putRequestLogTag = "http_client:put"
+	patchRequestLogTag = "http_client:patch"
+)
+
+type HttpClient interface {
+	Build(string, *ClientConfig)
+	Request(*HttpRequest) (int, interface{}, error)
+	get(*HttpRequest) (int, interface{}, error)
+	post(*HttpRequest) (int, interface{}, error)
+	put(*HttpRequest) (int, interface{}, error)
+	patch(*HttpRequest) (int, interface{}, error)
+}
+
+type HttpClientImpl struct {
+	HostPort     string
+	Client       *resty.Client
+	restyRequest *resty.Request
+}
+
+// Use net/http golang lib documentation to set the parameters
+type ClientConfig struct {
+	TransportProtocol     string        `json:"protocol"`
+	KeepAlive             time.Duration `json:"keep_alive_duration"`
+	DialTimeout           time.Duration `json:"dial_timeout"`
+	ResponseHeaderTimeout time.Duration `json:"response_header_timeout"`
+	IdleConnTimeout       time.Duration `json:"idle_connection_timeout"`
+	TLSHandshakeTimeout   time.Duration `json:"tls_handshake_timeout"`
+}
+
+func (h *HttpClientImpl) Build(HostPort string, config *ClientConfig) {
+	h.HostPort = HostPort
+	transportConfig := &http.Transport{
+		MaxIdleConnsPerHost: MaxIdleConnsPerHost,
+		Dial: (&net.Dialer{
+			Timeout:   config.DialTimeout * time.Second,
+			KeepAlive: config.KeepAlive * time.Second,
+		}).Dial,
+		TLSHandshakeTimeout:   config.TLSHandshakeTimeout * time.Second,
+		DisableKeepAlives:     false,
+		IdleConnTimeout:       config.IdleConnTimeout * time.Second,
+		ResponseHeaderTimeout: config.ResponseHeaderTimeout * time.Second,
+	}
+
+	h.Client = resty.New().SetTransport(transportConfig).SetScheme(config.TransportProtocol).SetHostURL(h.HostPort)
+}
+
+func (h *HttpClientImpl) Request(request *HttpRequest) (int, interface{}, error) {
+	var statusCode int
+	var respBody interface{}
+	var err error
+	h.restyRequest = h.Client.R()
+	if request.method == GET {
+		statusCode, respBody, err = h.get(request)
+	}
+	if request.method == POST {
+		statusCode, respBody, err = h.post(request)
+	}
+	if request.method == PUT {
+		statusCode, respBody, err = h.put(request)
+	}
+	return statusCode, respBody, err
+}
+
+func (h *HttpClientImpl) get(request *HttpRequest) (int, interface{}, error) {
+	logger.Info(getRequestLogTag, "Get Request url: %s", request.url)
+	res, err := h.restyRequest.SetPathParams(request.pathParams).SetQueryParams(request.queryParams).SetHeaders(request.headers).Get(request.url)
+	if err != nil {
+		return 0, nil, err
+	}
+	respStruct, mapErr := getStatusCodeToResponseMapping(res.Body(), res.StatusCode(), request)
+	if mapErr != nil {
+		return res.StatusCode(), string(res.Body()[:]), mapErr
+	}
+	return res.StatusCode(), respStruct, nil
+}
+
+func (h *HttpClientImpl) post(request *HttpRequest) (int, interface{}, error) {
+	logger.Info(postRequestLogTag, "Post Request url: %s", request.url)
+	h.restyRequest.SetHeaders(request.headers)
+	err := h.setRequestBodyOnContentType(request)
+	if err != nil {
+		return 0, nil, fmt.Errorf("Error occurred err: %v", err)
+	}
+	res, err := h.restyRequest.Post(request.url)
+	if err != nil {
+		return 0, nil, err
+	}
+	respStruct, mapErr := getStatusCodeToResponseMapping(res.Body(), res.StatusCode(), request)
+	if mapErr != nil {
+		return res.StatusCode(), string(res.Body()[:]), mapErr
+	}
+	return res.StatusCode(), respStruct, nil
+}
+
+func (h *HttpClientImpl) put(request *HttpRequest) (int, interface{}, error) {
+	logger.Info(putRequestLogTag, "Put Request url: %s", request.url)
+	h.restyRequest.SetHeaders(request.headers)
+	err := h.setRequestBodyOnContentType(request)
+	if err != nil {
+		return 0, nil, fmt.Errorf("Error occurred err: %v", err)
+	}
+	res, err := h.restyRequest.Put(request.url)
+	if err != nil {
+		return 0, nil, err
+	}
+	respStruct, mapErr := getStatusCodeToResponseMapping(res.Body(), res.StatusCode(), request)
+	if mapErr != nil {
+		return res.StatusCode(), string(res.Body()[:]), mapErr
+	}
+	return res.StatusCode(), respStruct, nil
+}
+
+func (h *HttpClientImpl) patch (request *HttpRequest) (int, interface{}, error) {
+	logger.Info(patchRequestLogTag, "Patch Request url: %s", request.url)
+	h.restyRequest.SetHeaders(request.headers)
+	err := h.setRequestBodyOnContentType(request)
+	if err != nil {
+		return 0, nil, fmt.Errorf("Error occurred err: %v", err)
+	}
+	res, err := h.restyRequest.Patch(request.url)
+	if err != nil {
+		return 0, nil, err
+	}
+	respStruct, mapErr := getStatusCodeToResponseMapping(res.Body(), res.StatusCode(), request)
+	if mapErr != nil {
+		return res.StatusCode(), string(res.Body()[:]), mapErr
+	}
+
+	return res.StatusCode(), respStruct, nil
+}
+
+func (h *HttpClientImpl) setRequestBodyOnContentType(request *HttpRequest) error {
+	if request.contentType == "multipart/form-data" {
+		h.restyRequest.SetFormData(request.formData)
+		if request.file != nil {
+			h.setFileInFormDataIOReader(request)
+		}
+	} else if request.contentType == "form-data" {
+		h.restyRequest.SetFormData(request.formData)
+	} else {
+		requestBody, marshalErr := json.Marshal(request.requestBodyParams)
+		if marshalErr != nil {
+			return marshalErr
+		}
+		h.restyRequest.SetBody(string(requestBody))
+	}
+	return nil
+}
+
+func (h *HttpClientImpl) setFileInFormDataIOReader(request *HttpRequest) {
+	h.restyRequest.SetFileReader(request.file.key, request.file.filename, request.file.file)
+}
+
+func getStatusCodeToResponseMapping(body []byte, statusCode int, request *HttpRequest) (interface{}, error) {
+	var responseStruct interface{}
+	var err error
+
+	if statusCode == http.StatusInternalServerError {
+		return body, nil
+	}
+
+	if statusCode == http.StatusOK {
+		if request.responseOK == nil {
+			return body, nil
+		}
+		responseStruct = request.responseOK
+	} else if statusCode == http.StatusCreated {
+		if request.responseCreated == nil {
+			return body, nil
+		}
+		responseStruct = request.responseCreated
+	} else if statusCode == http.StatusConflict {
+		if request.responseConflict == nil {
+			return body, nil
+		}
+		responseStruct = request.responseConflict
+	} else if statusCode == http.StatusNotFound {
+		if request.responseBad == nil {
+			return body, nil
+		}
+		responseStruct = request.responseBad
+	} else if statusCode == http.StatusForbidden {
+		if request.responseForbidden == nil {
+			return body, nil
+		}
+		responseStruct = request.responseForbidden
+	} else {
+		return nil, fmt.Errorf("No mapping found for the given status code to cast response")
+	}
+
+	err = json.Unmarshal(body, responseStruct)
+	if err != nil {
+		return nil, err
+	}
+	return responseStruct, nil
+}

@@ -1,0 +1,60 @@
+package astina
+
+import (
+	"fmt"
+	"net/http"
+
+	"bitbucket.org/kyc-agent/common/http_client"
+	"bitbucket.org/kyc-agent/common/logger"
+	"bitbucket.org/kyc-agent/common/utils/hmac"
+	"bitbucket.org/kyc-agent/external"
+)
+
+const (
+	updateClubToPremierLogTag = "external:astina:updateClubToPremier"
+)
+
+// Function requests astina to update customer account status to premier from club
+func updateClubToPremier(ovoId string, req *ClubToPremier, requestId string) (*ClubToPremierResponse, *AstinaSDKError) {
+
+	logger.Info(updateClubToPremierLogTag,
+		fmt.Sprintf("requesting astina to update customer account status to premier for requestId %s, request %+v", requestId, req))
+
+	premierResponse := &ClubToPremierResponse{}
+	var statusCode int
+	var err error
+	var resp interface{}
+
+	//generate hmac
+	hmacCode := hmac.Generate()
+
+	httpRequest := http_client.New()
+
+	httpRequest.SetUrl(clubToPremierUrl).SetHeader("Content-Type", "application/json").SetHeader("random", hmacCode.Random).SetPathParams(req).
+		SetHeader("app-id", hmacCode.AppID).SetHeader("hmac", hmacCode.Token).SetMethod(http_client.PATCH).
+		SetRequestBodyParams(req).SetResponseOK(premierResponse)
+
+	statusCode, resp, err = astinaHttpClient.Request(&httpRequest)
+
+	logger.Info(updateClubToPremierLogTag, "customer account upgrade to premier request completed", statusCode, resp, err)
+	switch response := resp.(type) {
+
+	case *ClubToPremierResponse:
+		logger.Info(updateClubToPremierLogTag, "received response from astina requestId=%s statuscode=%d, response %+v", requestId, statusCode, response)
+		return response, nil
+
+	default:
+		if err != nil && statusCode == 0 {
+			logger.Error(updateClubToPremierLogTag, "Error occurred while uploading data to astina for requestID: %s Statuscode: %d, error: %v",
+				requestId, statusCode, err)
+			return nil, &AstinaSDKError{Code: external.PreRequestProcessingError, Message: err.Error(), StatusCode: http.StatusInternalServerError}
+		} else if err != nil {
+			logger.Error(updateClubToPremierLogTag, "Error occurred while uploading data to astina for requestID: %s Statuscode: %d, error: %v, resp: %v",
+				requestId, statusCode, err, resp)
+			return nil, &AstinaSDKError{Code: external.HttpRequestError, Message: err.Error(), StatusCode: statusCode}
+		} else {
+			logger.Error(updateClubToPremierLogTag, "Response: %v, for requestID: %s, statuscode: %d", resp, requestId, statusCode)
+			return nil, &AstinaSDKError{Code: external.UnknownError, Message: "Something went wrong", StatusCode: statusCode}
+		}
+	}
+}

@@ -1,0 +1,128 @@
+cd ap
+cd api/
+ls
+mkdir todo
+ls
+cd todo/
+ls
+touch todo.go
+mkdir events
+ls
+rm events/
+ls
+cd ..
+kls
+ls
+mkdir events
+ls
+cd ../to
+cd ../exceptions/
+ls
+cd ../api/events/
+ls
+touch events.go
+ls
+cd ../todo/
+ls
+rm events
+ls
+rm -r events
+cd ../..
+ls
+ls
+cd ..
+ls
+cd ../logic/
+ls
+mkdir events
+ls
+touch events.go
+cd ..
+ls
+cd api/
+ls
+cd events/
+ls
+rm events.go
+ls
+ls
+pwd
+cd ../../logic/
+ls
+rm events.go 
+ls
+ls
+cd ..
+ls
+cd ..
+l
+ls
+cd  dto/
+ls
+mkdir event_dto
+ls
+mv event_dto eventDTO
+ls
+cd eventDTO/
+ls
+touch event_dto
+ls
+mv event_dto event_dto.go
+ls
+cd ..
+ls
+cd ..
+ls
+git status
+go run main.go
+git add .
+git status
+git commit -m "[todo/events] added api handler"
+git push origin todos
+ls
+cd ..
+ls
+ls
+cd ..
+ls
+cd storage/
+ls
+mkdir storage
+rm storage/
+rm -rstorage
+rm -r storage
+ls
+mkdir eventStorage
+ls
+cd eventStorage/
+ls
+touch events.go
+git status
+git add .
+git status
+git status
+git commit -m "Event Model"
+git status
+git status
+git add .
+git status
+git commit -m "fix"
+git rebase -i HEAD~2
+ls
+cd logic/
+ls
+mkdir todos
+ls
+cd ..
+ls
+cd dto/
+ls
+rm \#user.go\# 
+ls
+pwd
+mdkri todoDto
+ls
+mkdir todoDTO
+s
+ks
+ls

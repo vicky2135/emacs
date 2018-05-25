@@ -1,0 +1,6 @@
+package common
+
+const (
+	ClubToPremier = "club_to_premier"
+	ClubToSavings = "club_to_savings"
+)

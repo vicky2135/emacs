@@ -1,0 +1,29 @@
+package astina
+
+// Request dto for upgrading customer from club to premier
+type ClubToPremier struct {
+	FullName string `json:"fullName"`
+	BirthPlace string `json:"birthPlace"`
+	BirthDate string `json:"birthDate"`
+	Gender string `json:"gender"`
+	AddressDetail string `json:"addressDetail"`
+	AddressRW string `json:"addressRw"`
+	AddressRT string `json:"addressRt"`
+	ProvinceCode string `json:"provinceCode"`
+	CityCode string `json:"cityCode"`
+	District string `json:"district"`
+	Village string `json:"village"`
+	ReligionCode string `json:"religionCode"`
+	maritalStatus string `json:"maritalStatus"`
+	OccupationCode string `json:"occupationCode"`
+	KTPDateExpired string `json:"ktpDateExpired"`
+	NIK string `json:"nik"`
+	MothersMaiderName string `json:"motherMaidenName"`
+	FamilyCardNumber string `json:"familyCardNumber"`
+	Source string `json:"source"`
+}
+
+type ClubToPremierResponse struct {
+	Code int `json:"code"`
+	Message string `json:"message"`
+}

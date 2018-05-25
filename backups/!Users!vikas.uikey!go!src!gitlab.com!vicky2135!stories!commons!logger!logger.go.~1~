@@ -1,0 +1,95 @@
+package logger
+
+import (
+	"context"
+	"fmt"
+	"go.uber.org/zap"
+	"go.uber.org/zap/zapcore"
+)
+
+type LoggerConfig struct {
+	Level            zap.AtomicLevel `json:"level"`
+	Encoding         string          `json:"encoding"`
+	OutputPaths      []string        `json:"outputPaths"`
+	ErrorOutputPaths []string        `json:"errorOutputPaths"`
+}
+
+type Logger struct {
+	Tag         string
+	sugarLogger *zap.SugaredLogger
+}
+
+var cfg *zap.Config
+
+func Initialize(config *LoggerConfig) {
+
+	cfg.Encoding = config.Encoding
+	cfg.Level = config.Level
+	cfg.OutputPaths = config.OutputPaths
+	cfg.ErrorOutputPaths = config.ErrorOutputPaths
+	cfg.EncoderConfig = NewProductionEncoderConfig()
+}
+
+func New(tag string) *Logger {
+	logger, err := cfg.Build()
+	newLogger := new(Logger)
+	newLogger.Tag = tag
+	newLogger.sugarLogger = logger.Sugar()
+	if err != nil {
+		panic(err)
+	}
+
+	defer logger.Sync()
+
+	return newLogger
+}
+
+func (logger *Logger) formLogTemplate(ctx context.Context, message string) string {
+	template := "context:" + fmt.Sprint(ctx) + "    tag: " + logger.Tag + "   " + message
+	return template
+}
+
+func (logger *Logger) Info(ctx context.Context, message string, args ...interface{}) {
+	template := logger.formLogTemplate(ctx, message)
+	logger.sugarLogger.Infof(template, args...)
+}
+
+func (logger *Logger) Debug(ctx context.Context, message string, args ...interface{}) {
+	template := logger.formLogTemplate(ctx, message)
+	logger.sugarLogger.Debugf(template, args...)
+}
+
+func (logger *Logger) Warn(ctx context.Context, message string, args ...interface{}) {
+	template := logger.formLogTemplate(ctx, message)
+	logger.sugarLogger.Warnf(template, args...)
+}
+
+func (logger *Logger) Error(ctx context.Context, message string, args ...interface{}) {
+	template := logger.formLogTemplate(ctx, message)
+	logger.sugarLogger.Errorf(template, args...)
+}
+
+func (logger *Logger) Fatal(ctx context.Context, message string, args ...interface{}) {
+	template := logger.formLogTemplate(ctx, message)
+	logger.sugarLogger.Fatalf(template, args...)
+}
+
+func (logger *Logger) Panic(ctx context.Context, message string, args ...interface{}) {
+	template := logger.formLogTemplate(ctx, message)
+	logger.sugarLogger.Panicf(template, args...)
+}
+
+func NewProductionEncoderConfig() zapcore.EncoderConfig {
+	return zapcore.EncoderConfig{
+		TimeKey:        "ts",
+		LevelKey:       "level",
+		NameKey:        "logger",
+		MessageKey:     "msg",
+		StacktraceKey:  "stacktrace",
+		LineEnding:     zapcore.DefaultLineEnding,
+		EncodeLevel:    zapcore.LowercaseLevelEncoder,
+		EncodeTime:     zapcore.ISO8601TimeEncoder,
+		EncodeDuration: zapcore.SecondsDurationEncoder,
+		EncodeCaller:   zapcore.ShortCallerEncoder,
+	}
+}

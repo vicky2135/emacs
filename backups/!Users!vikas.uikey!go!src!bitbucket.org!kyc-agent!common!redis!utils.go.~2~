@@ -1,0 +1,127 @@
+package redis
+
+import (
+	"fmt"
+
+	"github.com/chasex/redis-go-cluster"
+)
+
+func Ping() error {
+	_, err := redis.String(clusterConn.Do("PING"))
+	if err != nil {
+		return fmt.Errorf("cannot 'PING' db: %v", err)
+	}
+	return nil
+}
+
+func Get(key string) ([]byte, error) {
+	var data []byte
+	data, err := redis.Bytes(clusterConn.Do("GET", key))
+	if err != nil {
+		return data, fmt.Errorf("error getting key %s: %v", key, err)
+	}
+	return data, err
+}
+
+func Set(key string, value []byte) error {
+	_, err := clusterConn.Do("SET", key, value)
+	if err != nil {
+		v := string(value)
+		if len(v) > 15 {
+			v = v[0:12] + "..."
+		}
+		return fmt.Errorf("error setting key %s to %s: %v", key, v, err)
+	}
+	return err
+}
+
+func SetEx(key string, age int64, value []byte) error {
+	_, err := clusterConn.Do("SETEX", key, age, value)
+
+	if err != nil {
+		v := string(value)
+		if len(v) > 15 {
+			v = v[0:12] + "..."
+		}
+		return fmt.Errorf("error setting key %s to %s: %v", key, v, err)
+	}
+	return err
+}
+
+func Exists(key string) (bool, error) {
+	ok, err := redis.Bool(clusterConn.Do("EXISTS", key))
+	if err != nil {
+		return ok, fmt.Errorf("error checking if key %s exists: %v", key, err)
+	}
+	return ok, err
+}
+
+func Delete(key string) error {
+	_, err := clusterConn.Do("DEL", key)
+	return err
+}
+
+func GetKeys(pattern string) ([]string, error) {
+	iter := 0
+	keys := []string{}
+	for {
+		arr, err := redis.Values(clusterConn.Do("SCAN", iter, "MATCH", pattern))
+		if err != nil {
+			return keys, fmt.Errorf("error retrieving '%s' keys", pattern)
+		}
+
+		iter, _ = redis.Int(arr[0], nil)
+		k, _ := redis.Strings(arr[1], nil)
+		keys = append(keys, k...)
+
+		if iter == 0 {
+			break
+		}
+	}
+
+	return keys, nil
+}
+
+func Incr(counterKey string) (int, error) {
+	return redis.Int(clusterConn.Do("INCR", counterKey))
+}
+
+func HSET(key, field string, value []byte) error {
+	_, err := clusterConn.Do("HSET", key, field, value)
+
+	if nil != err {
+		v := string(value)
+		if len(v) > 15 {
+			v = v[0:12] + "..."
+		}
+		return fmt.Errorf("error setting key %s to %s: %v", key, field, value)
+	}
+
+	return err
+}
+
+func HGET(key, field string) ([]byte, error) {
+	data, err := redis.Bytes(clusterConn.Do("HGET", key, field))
+
+	if err != nil {
+		return data, fmt.Errorf("error getting key %s: field %s:  %v", key, field, err)
+	}
+
+	return data, err
+}
+
+func HGETALL(key string) (interface{}, error) {
+	data, err := redis.Values(clusterConn.Do("HGETALL", key))
+
+	if nil != err {
+		return nil, fmt.Errorf("error while reading data from redis key %s error %v", key, err)
+	}
+
+	return data, nil
+}
+
+func Expire(key string, ttl int) error {
+	_, err := clusterConn.Do("EXPIRE", key, ttl)
+
+	return err
+}

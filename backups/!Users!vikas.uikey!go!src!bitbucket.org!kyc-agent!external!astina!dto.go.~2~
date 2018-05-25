@@ -1,0 +1,298 @@
+package astina
+
+import (
+	"encoding/json"
+
+	"bitbucket.org/kyc-agent/external"
+)
+
+type SearchCustomerByPhoneRequest struct {
+	Phone  string `json:"value"`
+	Method string `json:"method"`
+}
+
+type Email struct {
+	Id          string `json:"id"`
+	Address     string `json:"address"`
+	Status      string `json:"status"`
+	DateCreated string `json:"dateCreated"`
+	DateUpdated string `json:"dateUpdated"`
+}
+
+type Address struct {
+	DocumentKey      string `json:"documentKey"`
+	DocumentHandle   string `json:"documentHandle"`
+	DocumentRevision int64  `json:"documentRevision"`
+	Status           string `json:"status"`
+	Address1         string `json:"address1"`
+	Address2         string `json:"address2"`
+	RT               string `json:"rt"`
+	RW               string `json:"rw"`
+	Village          string `json:"village"`
+	District         string `json:"district"`
+	City             string `json:"city"`
+	Province         string `json:"province"`
+	PostalCode       string `json:"postalCode"`
+	Type             string `json:"type"`
+	Latitude         float64
+	Longitude        float64
+	DateCreated      string
+	DateUpdated      string
+}
+
+type KTP struct {
+	DateCreated   string `json:"dateCreated"`
+	DateUpdated   string `json:"dateUpdated"`
+	CreatedBy     string `json:"createdBy"`
+	UpdatedBy     string `json:"updatedBy"`
+	Status        string `json:"status"`
+	NIK           string `json:"NIK"`
+	Gender        string `json:"gender"`
+	MaritalStatus string `json:"maritalStatus"`
+	DateExpired   string `json:"dateExpired"`
+}
+
+type Company struct {
+	CompanyName    string `json:"companyName"`
+	Position       int    `json:"position"`
+	Income         int    `json:"income"`
+	MonthlyExpense int    `json:"monthlyExpense"`
+	FundingSource  int    `json:"fundingSource"`
+	BankRelation   int    `json:"bankRelation"`
+	Pep            int    `json:"pep"`
+	DateCreated    string
+	DateUpdated    string
+	Status         string
+	CreatedBy      string
+	UpdatedBy      string
+}
+
+type SavingAccount struct {
+	DateCreated string `json:"dateCreated"`
+	DateUpdated string `json:"dateUpdated"`
+	// Status
+	OvoID         string `json:"ovoId"`
+	AccountType   string `json:"accountType"`
+	IsTransfer    bool   `json:"isTransfer"`
+	AccountStatus string `json:"accountStatus"`
+}
+
+type NPWPCardDetails struct {
+	TaxId  string `json:"taxId"`
+	Reason int    `json:"reason"`
+}
+
+type OvoCard struct {
+	SerialNumber    string `json:"serialNumber"`
+	CardNumber      string `json:"cardNumber"`
+	Type            string `json:"type"`
+	IsLinkage       bool   `json:"isLinkage"`
+	IsActive        bool   `json:"isActive"`
+	Reason          string `json:"reason"`
+	Remark          string `json:"remark"`
+	MerchantId      int64  `json:"merchantId"`
+	FullName        string `json:"fullName"`
+	MerchantLogoUrl string `json:"merchantLogoUrl"`
+	ColorScheme     string `json:"colorScheme"`
+	Status          string `json:"status"`
+	DateCreated     string `json:"dateCreated"`
+	DateUpdated     string `json:"dateUpdated"`
+	CreatedBy       string `json:"createdBy"`
+	UpdatedBy       string `json:"updatedBy"`
+}
+
+type Telephone struct {
+	Id            string `json:"id"`
+	Number        string `json:"number"`
+	Ext           string `json:"ext"`
+	TelephoneType string `json:"telephoneType"`
+	Status        string `json:"status"`
+	DateCreated   string `json:"dateCreated"`
+	DateUpdated   string `json:"dateUpdated"`
+}
+
+type Organization struct {
+	DateCreated    string `json:"dateCreated"`
+	DateUpdated    string `json:"dateUpdated"`
+	Status         string `json:"status"`
+	CreatedBy      string `json:"createdBy"`
+	UpdatedBy      string `json:"updatedBy"`
+	Name           string `json:"name"`
+	OrganizationId string `json:"organizationId"`
+	Email          string `json:"email"`
+	PhoneNumber    string `json:"phoneNumber"`
+}
+
+type Device struct {
+	DateCreated        string `json:"dateCreated"`
+	DateUpdated        string `json:"dateUpdated"`
+	Status             string `json:"status"`
+	CreatedBy          string `json:"createdBy"`
+	UpdatedBy          string `json:"updatedBy"`
+	DeviceId           string `json:"deviceId"`
+	PushNotificationId string `json:"pushNotificationId"`
+	OsName             string `json:"osName"`
+	AppVersion         string `json:"appVersion"`
+	OsVersion          string `json:"osVersion"`
+}
+
+type BoltDevice struct {
+	DateCreated    string `json:"dateCreated"`
+	DateUpdated    string `json:"dateUpdated"`
+	Status         string `json:"status"`
+	CreatedBy      string `json:"createdBy"`
+	UpdatedBy      string `json:"updatedBy"`
+	CardType       string `json:"cardType"`
+	CardTitle      string `json:"cardTitle"`
+	CardHolderName string `json:"cardHolderName"`
+	ExpiredDate    string `json:"expiredDate"`
+	IsFavourite    string `json:"isFavourite"`
+	CardCategory   string `json:"cardCategory"`
+	BoltId         string `json:"boltId"`
+	MerchantId     int64  `json:"merchantId"`
+	MerchantName   string `json:"merchantName"`
+}
+
+type CamInvestment struct {
+	DateCreated       string `json:"dateCreated"`
+	DateUpdated       string `json:"dateUpdated"`
+	Status            string `json:"status"`
+	Education         int    `json:"education"`
+	InvestmentPurpose int64  `json:"investmentPurpose"`
+	RiskProfile       int64  `json:"riskProfile"`
+	UrlCamPdf         string `json:"urlCamPdf"`
+	KtpUrl            string `json:"ktpUrl"`
+	SpecimentUrl      string `json:"specimentUrl"`
+	OvoId             string `json:"ovoId"`
+	CamId             string `json:"camId"`
+	CamAccountStatus  string `json:"camAccountStatus"`
+}
+
+type Badge struct {
+	BadgeId     int    `json:"badgeId"`
+	MerchantId  int64  `json:"merchantId"`
+	IsUnlock    bool   `json:"isUnlock"`
+	DateCreated string `json:"dateCreated"`
+	DateUpdated string `json:"dateUpdated"`
+	Target      int64  `json:"target"`
+	Progress    int64  `json:"progress"`
+}
+
+type KycWeb struct {
+	DateCreated string `json:"dateCreated"`
+	DateUpdated string `json:"dateUpdated"`
+	Status      string `json:"status"`
+	CreatedBy   string `json:"createdBy"`
+	UpdatedBy   string `json:"updatedBy"`
+}
+
+type Config struct {
+	DateCreated     string
+	DateUpdated     string
+	Status          string
+	CreatedBy       string
+	UpdatedBy       string
+	Tiering         int64
+	DefaultLanguage string
+}
+
+type Customer struct {
+	DateCreated          string           `json:"dateCreated"`
+	DateUpdated          string           `json:"dateUpdated"`
+	Status               string           `json:"status"`
+	CreatedBy            string           `json:"createdBy"`
+	UpdatedBy            string           `json:"updatedBy"`
+	FullName             string           `json:"fullName"`
+	NickName             string           `json:"nickName"`
+	DeviceID             string           `json:"deviceId"`
+	LockStatus           string           `json:"lockStatus"`
+	Type                 string           `json:"type"`
+	Level                string           `json:"level"`
+	State                string           `json:"state"`
+	KtpCard              *KTP             `json:"ktpCard"`
+	LmpCard              string           `json:"lmpCard"`
+	Passport             string           `json:"passport"`
+	Document             string           `json:"document"`
+	RefNo                string           `json:"refNo"`
+	UserLevel            int              `json:"userLevel"`
+	BirthPlace           string           `json:"birthPlace"`
+	Religion             int              `json:"religion"`
+	Nationality          int              `json:"nationality"`
+	NpwpCard             *NPWPCardDetails `json:"npwpCard"`
+	Company              *Company         `json:"company"`
+	Family               string           `json:"family"`
+	Occupation           int              `json:"occupation"`
+	MotherMaidenName     string           `json:"motherMaidenName"`
+	Cif                  string           `json:"cif"`
+	FirstSignIn          string           `json:"firstSignIn"`
+	LastSignIn           string           `json:"lastSignIn"`
+	CamId                string           `json:"camId"`
+	OvoID                string           `json:"ovoId"`
+	DateOfBirth          string           `json:"dateOfBirth"`
+	Addresses            []*Address       `json:"addresses"`
+	Telephones           []*Telephone     `json:"telephones"`
+	Emails               []*Email         `json:"emails"`
+	Cards                []string         `json:"cards"`
+	MacAddresses         []string         `json:"macAddresses"`
+	Drivers              []string         `json:"drivers"`
+	OvoCard              []*OvoCard       `json:"ovoCard"`
+	Organization         *Organization    `json:"organization"`
+	Bonus                string           `json:"bonus"`
+	MobilePhoneNumber    string           `json:"mobilePhoneNumber"`
+	Email                string           `json:"email"`
+	RegistrationOrigin   string           `json:"registrationOrigin"`
+	DateOnUpgrade        string           `json:"dateOnUpgrade"`
+	Devices              []*Device        `json:"devices"`
+	BoltDevices          []*BoltDevice    `json:"boltDevices"`
+	IsVerify             string           `json:"isVerify"`
+	VerifyDate           string           `json:"verifyDate"`
+	LinkedMerchants      []string         `json:"linkedMerchants"`
+	Investment           string           `json:"investment"`
+	CamInvestment        *CamInvestment   `json:"camInvestment"`
+	BankAccount          string           `json:"bankAccount"`
+	OvoNobuCam           string           `json:"ovoNobuCam"`
+	Badges               []*Badge         `json:"badges"`
+	KycWeb               *KycWeb          `json:"kycWeb"`
+	Config               *Config          `json:"config"`
+	KTPImageBase64       string           `json:"ktpImageBase64,omitempty"`
+	NPWPImageBase64      string           `json:"npwpImageBase64,omitempty"`
+	SelfieImageBase64    string           `json:"selfieImageBase64,omitempty"`
+	SignatureImageBase64 string           `json:"signatureImageBase64,omitempty"`
+	SavingAccount        []*SavingAccount `json:"savingAccount,omitempty"`
+}
+
+type AstinaSDKError struct {
+	Code       external.ErrorCode `json:"code"`
+	Message    string             `json:"message"`
+	StatusCode int                `json:"status_code"`
+}
+
+func (err *AstinaSDKError) Error() string {
+	return err.Message
+}
+
+func (err *AstinaSDKError) Serialize() (string, error) {
+	serializeData, e := json.Marshal(err)
+	if e != nil {
+		return "", e
+	}
+	return string(serializeData[:]), nil
+}
+
+func (c *Customer) String() string {
+	j, _ := json.MarshalIndent(c, "", "  ")
+
+	return string(j)
+}
+
+func (err *AstinaSDKError) GetCode() external.ErrorCode {
+	return err.Code
+}
+
+func (err *AstinaSDKError) GetMessage() string {
+	return err.Message
+}
+
+func (err *AstinaSDKError) GetStatusCode() int {
+	return err.StatusCode
+}

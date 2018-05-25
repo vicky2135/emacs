@@ -1,0 +1,113 @@
+{
+  "logger" : {
+    "level": "debug",
+    "encoding": "console",
+    "outputPaths": ["stdout", "/tmp/logs"],
+    "errorOutputPaths": ["stderr", "/tmp/logs"]
+  },
+  "redis": {
+    "max_idle": 3,
+    "idle_timeout": 1000,
+    "address": "192.168.1.156:6379",
+    "network": "tcp",
+    "max_active": 100
+  },
+  "cookie": {
+    "cookie_key": "kycAgentSession",
+    "cookie_path": "/",
+    "cookie_max_age": 300000,
+    "cookie_secure": false,
+    "cookie_http_only": true,
+    "session_name": "kyc-agent-session"
+  },
+  "server": {
+    "host": "0.0.0.0:8080",
+    "api_version": "v1",
+    "public_assets_dir":"",
+    "confirmation_code_ttl": 1000
+  },
+  "mobile_banker": {
+    "host_port": "https://dududev.ovo.id",
+    "device_id": "kyc.nobu",
+    "role_code": 64,
+    "client_config": {
+      "protocol": "https",
+      "dial_timeout": 10,
+      "response_header_timeout": 10
+    }
+  },
+  "astina": {
+    "host_port": "https://dududev.ovo.id",
+    "client_config": {
+      "protocol": "https",
+      "dial_timeout": 3,
+      "response_header_timeout": 10
+    }
+  },
+  "smsConfig": {
+    "message_content": "OVO-%v adalah challenge code. Infokan kepada agen Anda untuk melengkapi proses registrasi."
+  },
+  "falcon": {
+    "host_port": "https://dududev.ovo.id/v1.0/document",
+    "get_metadata": "%s/customer/%s?documentType=%s&isDefault=true",
+    "get_image": "%s/%s/raw/query",
+    "client_config": {
+      "protocol": "https",
+      "dial_timeout": 3,
+      "response_header_timeout": 10
+    }
+  },
+  "phantom": {
+    "host_port": "https://dududev.ovo.id",
+    "client_config": {
+      "protocol": "https",
+      "dial_timeout": 3,
+      "response_header_timeout": 10
+    },
+    "bupro": "9990",
+    "bigp": "99",
+    "kims_no": "0",
+    "time_format": "20060102"
+  },
+  "hmac":{
+    "secret": "1cbe29ab6f553b194bbf84578d55ce356a118de53015b9196e3159e600e1b1df",
+    "app_id": "api-fintech"
+  },
+  "bounty_hunter":{
+    "url": "https://dududev.ovo.id",
+    "client_config": {
+      "protocol": "https",
+      "dial_timeout": 3,
+      "response_header_timeout": 10
+    }
+  },
+  "protocoldroid": {
+    "host_port": "https://dududev.ovo.id",
+    "device_id": "kyc.nobu",
+    "role_code": 1048576,
+    "client_config": {
+      "protocol": "https",
+      "dial_timeout": 3,
+      "response_header_timeout": 10
+    }
+  },
+  "moenia": {
+    "host_port": "https://dududev.ovo.id",
+    "device_id": "kyc.nobu",
+    "role_code": 1048576,
+    "client_config": {
+      "protocol": "https",
+      "dial_timeout": 3,
+      "response_header_timeout": 10
+    }
+  },
+  "otpConfig":{
+    "otp_length": 6,
+    "otpttl": 300,
+    "success_ttl": 1,
+    "max_attempts":2,
+    "max_resend": 3,
+    "is_blocking_allowed": true,
+    "blocking_time":900
+  }
+}

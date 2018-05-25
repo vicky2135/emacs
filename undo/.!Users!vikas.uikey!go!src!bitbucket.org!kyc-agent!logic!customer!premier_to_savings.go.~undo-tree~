@@ -1,0 +1,3 @@
+"751a568f8efc7a4468ab6e0cf9b786abe9cfe2a0"
+[cl-struct-undo-tree [nil ([nil ([nil (#1=[nil nil ((2360 . 2363) (t 23298 22332 805218 684000)) nil (23298 22341 390025 0) 0 nil]) ((#("	\"fmt\"
+" 0 1 (fontified t face whitespace-tab) 1 6 (fontified t face font-lock-string-face) 6 7 (fontified t)) . -244) (28 . 36) 925) nil (23298 22332 798124 0) 0 nil]) ((921 . 925) (t 23291 55541 303446 158000)) nil (23298 22332 798138 0) 0 nil]) nil nil (23298 22332 798139 0) 0 nil] #1# 63 3 nil]

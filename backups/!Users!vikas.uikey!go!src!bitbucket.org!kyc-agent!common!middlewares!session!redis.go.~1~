@@ -1,0 +1,17 @@
+package session
+
+import "github.com/gorilla/sessions"
+
+type store struct {
+	*RedisStore
+}
+
+func (c *store) Options(options session.Options) {
+	c.RedisStore.Options = &sessions.Options{
+		Path:     options.Path,
+		Domain:   options.Domain,
+		MaxAge:   options.MaxAge,
+		Secure:   options.Secure,
+		HttpOnly: options.HttpOnly,
+	}
+}

@@ -1,0 +1,70 @@
+package server
+
+import (
+	"github.com/gorilla/mux"
+	"gitlab.com/vicky2135/stories/api/users"
+	"gitlab.com/vicky2135/stories/commons/funnel"
+	"gitlab.com/vicky2135/stories/config"
+	"gitlab.com/vicky2135/stories/dto"
+	"gopkg.in/tylerb/graceful.v1"
+	"net/http"
+	"time"
+)
+
+var (
+	srv          *graceful.Server
+	httpShutdown = make(chan struct{})
+)
+
+func doApiRouting(r *mux.Router) {
+
+	r.HandleFunc("/signup",
+		funnel.ApiHandler(
+			users.CreateUserHandler,
+			&dto.CreateUserRequest{})).Methods("POST")
+
+	r.HandleFunc("/login",
+		funnel.ApiHandler(
+			users.LoginUser,
+			nil)).Methods("POST")
+
+	r.HandleFunc("/logout",
+		funnel.ApiHandler(
+			users.LogoutUser,
+			nil)).Methods("POST")
+}
+
+func startServer() {
+
+	defer doAPIPanicRecovery("stories")
+	r := mux.NewRouter()
+	r.Use(funnel.LoggingMiddleware)
+	doApiRouting(r)
+
+	srv = &graceful.Server{
+		Server: &http.Server{
+			Addr:           config.Config.InternalHostAndPort,
+			Handler:        r,
+			ReadTimeout:    10 * time.Second,
+			WriteTimeout:   10 * time.Second,
+			MaxHeaderBytes: 1 << 20,
+		},
+		ShutdownInitiated: func() {
+			// TODO: relying on graceful HTTP server to shutdown rpc server gracefully, will change to catch signal after HTTP server removed
+		},
+		Timeout: time.Second * 3,
+	}
+
+	srv.ListenAndServe()
+	close(httpShutdown)
+}
+
+func doAPIPanicRecovery(serviceTag string) {
+	if r := recover(); r != nil {
+
+	}
+}
+
+func stopHTTPServer() <-chan struct{} {
+	return httpShutdown
+}

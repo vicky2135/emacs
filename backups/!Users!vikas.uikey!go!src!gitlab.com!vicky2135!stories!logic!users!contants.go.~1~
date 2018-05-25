@@ -1,0 +1,8 @@
+package users
+
+// Gender
+const (
+	GenderMale        = "Male"
+	GenderFemale      = "Female"
+	GenderUnspecified = "Unspecified"
+)

@@ -1,0 +1,23 @@
+package redis
+
+import (
+	"time"
+
+	"github.com/chasex/redis-go-cluster"
+)
+
+var clusterConn *redis.Cluster
+
+func InitializeRedisCluster() error {
+	var err error
+	clusterConn, err = redis.NewCluster(
+		&redis.Options{
+			StartNodes:   []string{"192.168.1.156:6379", "192.168.1.157:6379"},
+			ConnTimeout:  5 * time.Second,
+			ReadTimeout:  5 * time.Second,
+			WriteTimeout: 5 * time.Second,
+			KeepAlive:    16,
+			AliveTime:    5 * time.Second,
+		})
+	return err
+}

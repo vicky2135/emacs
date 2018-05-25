@@ -1,0 +1,38 @@
+package main
+
+import (
+	"bitbucket.org/kyc-agent/config"
+	"bitbucket.org/kyc-agent/external/astina"
+	"bitbucket.org/kyc-agent/external/bounty_hunter"
+	"bitbucket.org/kyc-agent/external/falcon"
+	"bitbucket.org/kyc-agent/external/mobile_banker"
+	"bitbucket.org/kyc-agent/external/moenia"
+	"bitbucket.org/kyc-agent/external/phantom"
+	"bitbucket.org/kyc-agent/external/protocolroid"
+	"bitbucket.org/kyc-agent/server"
+)
+
+func main() {
+
+	config.Initialize()
+
+	initializeExternalClients()
+
+	server.Start()
+}
+
+func initializeExternalClients() {
+	astina.Initialize()
+
+	//bounty_hunter.Initialize()
+
+	falcon.Initialize()
+
+	mobile_banker.Initialize()
+
+	moenia.Initialize()
+
+	phantom.Initialize()
+
+	protocoldroid.Initialize()
+}

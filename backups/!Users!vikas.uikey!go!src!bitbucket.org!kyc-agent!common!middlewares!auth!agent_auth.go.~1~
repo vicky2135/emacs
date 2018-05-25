@@ -1,0 +1,39 @@
+package auth
+
+import (
+	"bitbucket.org/kyc-agent/common/logger"
+	"bitbucket.org/kyc-agent/external/mobile_banker"
+	"fmt"
+	"github.com/gin-contrib/sessions"
+	"github.com/gin-gonic/gin"
+	"net/http"
+)
+
+const (
+	WarnTokenNotFound = "Token not found"
+	WarnInvalidToken  = "Invalid token: %v"
+)
+
+func Auth(c *gin.Context) {
+	fmt.Printf("%+v", c.Keys["github.com/gin-contrib/sessions"])
+	sess := sessions.Default(c)
+	token, ok := sess.Get("token").(string)
+	if !ok {
+		err := fmt.Errorf(WarnTokenNotFound)
+		logger.Warn(WarnInvalidToken, "error while fetching token from session store", err)
+		c.AbortWithError(http.StatusUnauthorized, err)
+		return
+	}
+
+	validateRequest := &mobile_banker.ValidateRequest{
+		Token: token,
+	}
+	_, err := mobile_banker.ValidateSession(validateRequest, c.MustGet("RequestId").(string))
+	if err != nil {
+		logger.Warn(WarnInvalidToken, "error while validating token from mobile banker", err)
+		c.AbortWithError(http.StatusUnauthorized, err)
+		return
+	}
+
+	c.Next()
+}

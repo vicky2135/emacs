@@ -1,0 +1,32 @@
+package astina
+
+import (
+	"bitbucket.org/kyc-agent/common/http_client"
+	"bitbucket.org/kyc-agent/config"
+)
+
+const (
+	logTag                   = "external:astina:"
+	logSearchCustomerByPhone = logTag + "searchCustomerByPhone"
+	customerSearchUrl        = "/api/customers/check"
+	clubToPremierUrl         = "/api/customers/{ovoId}/upgrade/premier"
+)
+
+var astinaHttpClient *http_client.HttpClientImpl
+
+func Initialize() {
+	astinaHttpClient = &http_client.HttpClientImpl{}
+	setAstinaHttpClient()
+}
+
+func setAstinaHttpClient() {
+	astinaHttpClient.Build(config.Config.Astina.HostPort, config.Config.Astina.ClientConfig)
+}
+
+func SearchCustomerByPhone(req *SearchCustomerByPhoneRequest, requestID string) (*Customer, *AstinaSDKError) {
+	return searchCustomerByPhone(req, requestID)
+}
+
+func UpgradeAccountToPremier(req *ClubToPremier, requestId string) (*ClubToPremierResponse, *AstinaSDKError) {
+	return updateClubToPremier(req, requestId)
+}

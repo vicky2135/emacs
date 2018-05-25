@@ -1,0 +1,97 @@
+package agent
+
+import (
+	"bitbucket.org/kyc-agent/config"
+	"net/http"
+
+	"bitbucket.org/kyc-agent/common/logger"
+	"bitbucket.org/kyc-agent/dto"
+	"bitbucket.org/kyc-agent/exceptions"
+	"bitbucket.org/kyc-agent/external/mobile_banker"
+	"fmt"
+	"github.com/gin-contrib/sessions"
+	"github.com/gin-gonic/gin"
+	"time"
+)
+
+const (
+	agentLoginLogTag  = "logic:agent:agent:AgentLogin"
+	agentLogoutLogTag = "logic:agent:agent:AgentLogout"
+	deviceId          = "kyc.nobu"
+)
+
+// function to sign in kyc-agent
+// forwards call to mobile banker to sign in
+// initiate agent session on successfully sign in
+func AgentLogin(ctx *gin.Context, loginRequest *dto.LoginRequest) (*dto.LoginResponse, *exceptions.ErrorResponse) {
+
+	requestId := ctx.MustGet("RequestId").(string)
+	logger.Info(agentLoginLogTag, fmt.Sprintf("agent login initiated for request id %s", requestId))
+
+	agentLoginError := &exceptions.ErrorResponse{}
+	// forward request to mobile banker to login and respond with agent details
+	loginPayload := &mobile_banker.LoginPayload{
+		Username: loginRequest.Username,
+		Password: loginRequest.Password,
+		DeviceID: deviceId,
+	}
+
+	agent, err := mobile_banker.AgentLogin(loginPayload, requestId)
+
+	if nil != err {
+		return nil, exceptions.TransformSDKErrorToKYCError(err)
+	}
+	// Check role
+	if !agent.Active || (config.Config.Mobilebanker.RoleCode&agent.Role != config.Config.Mobilebanker.RoleCode) {
+
+		agentLoginError.Build(exceptions.AgentPermissionErrorCode)
+		logger.Info(agentLoginLogTag, fmt.Sprintf("unauthorized agent, cannot proceed %s", requestId))
+		return nil, agentLoginError
+	}
+
+	// save session
+	logger.Info(agentLoginLogTag, fmt.Sprintf("Agent Login Successful! for %s", requestId))
+
+	// creating and saving session
+	sess := sessions.Default(ctx)
+	sess.Set("id", agent.ID)
+	sess.Set("username", agent.Username)
+	sess.Set("name", agent.FirstName+" "+agent.LastName)
+	sess.Set("token", agent.Token)
+	sess.Set("mobile", agent.Mobile)
+	sess.Set("role", agent.Role)
+	sess.Set("login_at", time.Now().String())
+	sessionErr := sess.Save()
+
+	if sessionErr != nil {
+		logger.Error(agentLoginLogTag, fmt.Sprintf("failed to save session for %s", requestId), sessionErr)
+		agentLoginError.Build(exceptions.AgentSessionSaveErrorCode)
+		return nil, agentLoginError
+	}
+
+	loginResponse := &dto.LoginResponse{
+		Data:    agent,
+		Code:    1001,
+		Message: "agent succesfully logged in",
+	}
+
+	return loginResponse, nil
+}
+
+// function to sign out kyc agent
+// forwards call to sign out agent from mobile banker
+// removes agent session data from session store
+func AgentLogout(ctx *gin.Context) {
+
+	logger.Info(agentLogoutLogTag, "agent logout initiated")
+	session := sessions.Default(ctx)
+	session.Clear()
+
+	err := session.Save()
+
+	if nil != err {
+		logger.Error(agentLogoutLogTag, "Error logout Agent")
+	}
+
+	ctx.JSON(http.StatusOK, "Agent Logout Successfully")
+}

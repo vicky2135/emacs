@@ -1,0 +1,12 @@
+package commons
+
+type Location struct {
+	Address  string
+	Landmark string
+	Pincode  string
+	Village  string
+	Town     string
+	District string
+	State    string
+	Country  int
+}

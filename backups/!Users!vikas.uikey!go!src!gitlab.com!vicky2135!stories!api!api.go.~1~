@@ -1,0 +1,48 @@
+package api
+
+import (
+	"encoding/json"
+	"net/http"
+	"gitlab.com/vicky2135/stories/exceptions"
+)
+
+type APIError struct {
+	Code           int    `json:"code"`
+	Message        string `json:"message"`
+	DisplayMessage string `json:"display_message"`
+}
+
+const (
+	unknownErrMessage = "Something went wrong"
+)
+
+func ResponseSuccess(resp interface{}) (int, []byte) {
+
+	bytesResp, _ := json.Marshal(resp)
+	return http.StatusOK, bytesResp
+}
+
+func ResponseFailed(err *exceptions.ErrorResponse) (int, []byte) {
+
+	httpStatusCode := err.HttpStatusCode
+	message := err.Message
+	if err.Message == "" {
+		message = unknownErrMessage
+	}
+	displayMsg := err.DisplayMessage
+	if err.DisplayMessage == "" {
+		displayMsg = unknownErrMessage
+	}
+	if httpStatusCode <= 200 || httpStatusCode >= 600 {
+		httpStatusCode = 500
+	}
+
+	response := &APIError{
+		Code:           int(err.Code),
+		Message:        message,
+		DisplayMessage: displayMsg,
+	}
+
+	errBytes, _ := json.Marshal(response)
+	return httpStatusCode, errBytes
+}

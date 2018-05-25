@@ -1,0 +1,1 @@
+("~/go/src/bitbucket.org/kyc-agent/" "~/go/src/gitlab.com/vicky2135/stories/" "~/go/src/gitlab.com/vicky2135r/stories/")

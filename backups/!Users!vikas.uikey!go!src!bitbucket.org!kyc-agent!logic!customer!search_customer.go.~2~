@@ -1,0 +1,77 @@
+package customer
+
+import (
+	"fmt"
+
+	"bitbucket.org/kyc-agent/common/logger"
+	"bitbucket.org/kyc-agent/config"
+	"bitbucket.org/kyc-agent/dto"
+	"bitbucket.org/kyc-agent/exceptions"
+	"bitbucket.org/kyc-agent/external/astina"
+	"bitbucket.org/kyc-agent/logic/customer/utils"
+	"bitbucket.org/kyc-agent/logic/otp"
+	"github.com/gin-gonic/gin"
+)
+
+func SearchCustomer(c *gin.Context, search *dto.CustomerSearch) (*astina.Customer, *exceptions.ErrorResponse) {
+
+	requestId := c.MustGet("RequestId").(string)
+
+	logger.Info(searchCustomerLogTag, fmt.Sprintf("request received to search customer: %s", requestId))
+
+	searchCustomerError := &exceptions.ErrorResponse{}
+
+	searchCustomer := &astina.SearchCustomerByPhoneRequest{
+		Phone:  search.Phone,
+		Method: method,
+	}
+
+	customer, err := astina.SearchCustomerByPhone(searchCustomer, requestId)
+
+	if nil != err {
+		return nil, exceptions.TransformSDKErrorToKYCError(err)
+	}
+
+	if customer == nil {
+		logger.Info(searchCustomerLogTag, "No customer found for given phone number")
+		searchCustomerError.Build(exceptions.NoCustomerFoundErrorCode)
+		return nil, searchCustomerError
+	}
+
+	logger.Info(searchCustomerLogTag, "received customer details", customer)
+
+	// do not send data for blocked customer
+	otpKey := otpRedisKey + customer.OvoID
+	isValidCustomerSession, customerSessionErr := otp.IsValidSession(requestId, config.Config.OtpConfig, otpKey)
+	if isValidCustomerSession == otp.InvalidSession {
+		return nil, customerSessionErr
+	}
+
+	accountVerificationErr := utils.VerifyAccountStatus(customer.SavingAccount)
+
+	if accountVerificationErr != nil {
+		return nil, accountVerificationErr
+	}
+
+	// get KTP, NPWP, Sign, Selfie images from falcon
+	customer.KTPImageBase64, _ = getImage(requestId, customer.OvoID, KTPDocumentType)
+	customer.NPWPImageBase64, _ = getImage(requestId, customer.OvoID, NPWPDocumentType)
+	customer.SignatureImageBase64, _ = getImage(requestId, customer.OvoID, SignatureDocumentType)
+	customer.SelfieImageBase64, _ = getImage(requestId, customer.OvoID, SelfieDocumentType)
+
+	customerCache := new(utils.AstinaCache).
+		SetOvoId(customer.OvoID).
+		SetMobile(customer.MobilePhoneNumber).
+		SetEmailIds(customer.Emails).
+		SetSavingsAccount(customer.SavingAccount)
+
+	writeCacheErr := utils.WriteCustomerCache(requestId, customer.OvoID, customerCache, defaultTTL)
+	if writeCacheErr != nil {
+		return nil,
+			writeCacheErr
+	}
+
+	logger.Info(searchCustomerLogTag, "successfully save the customer info in redis cache")
+
+	return customer, nil
+}

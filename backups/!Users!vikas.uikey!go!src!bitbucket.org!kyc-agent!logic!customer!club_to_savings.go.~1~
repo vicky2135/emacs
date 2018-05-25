@@ -1,0 +1,32 @@
+package customer
+
+import (
+	"bitbucket.org/kyc-agent/dto"
+	"bitbucket.org/kyc-agent/exceptions"
+	"github.com/gin-gonic/gin"
+)
+
+// ClubToPremier is used to update the customer account status to premier from club
+// STEPS to update customer account to premier
+// STEP 1: update customer documents to falcon
+// STEP 2: Update customer data in astina from club to premier
+// STEP 3: update customer data in phantom from premier to savings
+
+type ClubToSavings struct {}
+
+// processing STEP 1: uploading customer data required for premier kyc to astina
+func (c *ClubToSavings) UpgradeToPremier(request *dto.ClubKycRequest, requestId string) *exceptions.ErrorResponse {
+	return upgradeToPremierImpl(request, requestId)
+}
+
+// processing STEP 2: uploading customer identity docs to falcon
+func (c *ClubToSavings) UploadDocs(request *dto.ClubKycRequest, requestId string) *exceptions.ErrorResponse {
+
+	return nil
+}
+
+// processing STEP 3: updating myc agent report to bounty-hunter
+func (c *ClubToSavings) FinishKyc(ctx *gin.Context, request *dto.ClubKycRequest, requestId string) *exceptions.ErrorResponse {
+
+	return nil
+}

@@ -1,0 +1,33 @@
+package eventStorage
+
+import (
+	"time"
+
+	"gitlab.com/vicky2135/stories/storage"
+)
+
+type Event struct {
+	ID             int64             `json:"id"`
+	EventName      string            `json:"event_name"`
+	EventStartTime string            `json:"event_start_time"`
+	EventLocation  *storage.Location `json:"event_location"`
+	EventOrganiser int64             `json:"event_organiser"`
+	EventType      string            `json:"event_type"`
+	Theme          string            `json:"theme"`
+	IntrestedCount int64             `json:"intrested_count"`
+	GoingCount     int64             `json:"going_count"`
+	ReservedSeats  int64             `json:"reserved_seats"`
+	EventFee       string            `json:"event_fee"`
+	NotGoingCount  int64             `json:"not_going_count"`
+	IsDeleted      bool              `json:"is_deleted"`
+	IsActive       bool              `json:"is_active"`
+	CreatedBy      int64             `json:"created_by"`
+	UpdatedBy      time.Time         `json:"updated_by"`
+	CreatedAt      time.Time         `json:"created_at"`
+	UpdateAt       int64             `json:"update_at"`
+}
+
+type UserEventMapping struct {
+	EventId  int64 `json:"event_id"`
+	MemberId int64 `json:"member_id"`
+}

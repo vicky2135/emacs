@@ -1,0 +1,71 @@
+
+;; ----- smex-history -----
+(
+ life
+ load-theme
+ undo-tree-visualize
+ delete-file
+ snake
+ json-pretty-print
+ pwd
+)
+
+;; ----- smex-data -----
+(
+ (package-install . 7)
+ (whitespace-mode . 1)
+ (whitespace-cleanup . 4)
+ (list-packages . 6)
+ (projectile-switch-open-project . 2)
+ (neotree . 1)
+ (godef-jump . 2)
+ (pop-tag-mark . 6)
+ (load-file . 1)
+ (load-theme . 6)
+ (go-projectile-install-tools . 1)
+ (go-play-buffer . 1)
+ (list-faces-display . 1)
+ (go-playground . 1)
+ (go-guru-callees . 3)
+ (go-projectile-git-grep . 1)
+ (go-tag-refresh . 3)
+ (go-tag-add . 11)
+ (magit-diff . 2)
+ (magit-log . 2)
+ (godoc . 1)
+ (eldoc-mode . 1)
+ (read-color . 1)
+ (list-colors-display . 1)
+ (go-guru-set-scope . 7)
+ (pwd . 20)
+ (jc/go-guru-set-current-package-as-main . 1)
+ (magit-status . 1)
+ (magit-checkout . 1)
+ (magit-checkout-file . 1)
+ (projectile-mode . 4)
+ (projectile-clear-known-projects . 1)
+ (projectile-grep . 4)
+ (flycheck-mode . 1)
+ (rename-file . 8)
+ (linum-mode . 3)
+ (flycheck-error-list-mode . 2)
+ (go-mode . 1)
+ (eshell . 10)
+ (projectile-edit-dir-locals . 1)
+ (delete-file . 4)
+ (undo-tree-visualizer-toggle-diff . 1)
+ (undo-tree-mode . 2)
+ (undo-tree-visualize . 3)
+ (json-pretty-print . 2)
+ (flycheck-next-error . 2)
+ (set-background-color . 2)
+ (json-mode . 1)
+ (flycheck-list-errors . 1)
+ (go-tag-remove . 1)
+ (projectile-browse-dirty-projects . 1)
+ (flycheck-error-list-next-error . 2)
+ (uncomment-region . 1)
+ (magit-branch . 1)
+ (snake . 1)
+ (life . 4)
+)

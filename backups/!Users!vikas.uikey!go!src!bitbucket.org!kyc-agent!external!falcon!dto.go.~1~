@@ -1,0 +1,74 @@
+package falcon
+
+import (
+	"bitbucket.org/kyc-agent/external"
+	"bytes"
+	"encoding/json"
+)
+
+type UploadImageRequest struct {
+	File           *bytes.Buffer
+	Filename       string
+	FileKey        string
+	OvoID          string `form:"ovoId"`
+	AttachmentHash string `form:"attachment-hash"`
+}
+
+type UploadImageResponse struct {
+	Code    int    `json:"code"`
+	Message string `json:"message"`
+	Data    string `json:"data"`
+}
+
+type GetImageRequest struct {
+	ImageUrl string
+}
+
+type GetImageResponse struct {
+	Image []byte
+}
+
+type GetMetaDataRequest struct {
+	MetaDataUrl string
+}
+
+type GetMetaDataResponse map[string][]*Metadata
+
+type Metadata struct {
+	Id             string `json:"id"`
+	DocumentFormat string `json:"documentFormat"`
+	FileName       string `json:"fileName"`
+	DateCreated    string `json:"dateCreated"`
+	DateUpdated    string `json:"dateUpdated"`
+	IsDefault      bool   `json:"isDefault"`
+}
+
+type FalconSDKError struct {
+	Code       external.ErrorCode `json:"code"`
+	Message    string             `json:"message"`
+	StatusCode int                `json:"status_code"`
+}
+
+func (err *FalconSDKError) Error() string {
+	return err.Message
+}
+
+func (err *FalconSDKError) Serialize() (string, error) {
+	serializeData, e := json.Marshal(err)
+	if e != nil {
+		return "", e
+	}
+	return string(serializeData[:]), nil
+}
+
+func (err *FalconSDKError) GetCode() external.ErrorCode {
+	return err.Code
+}
+
+func (err *FalconSDKError) GetMessage() string {
+	return err.Message
+}
+
+func (err *FalconSDKError) GetStatusCode() int {
+	return err.StatusCode
+}

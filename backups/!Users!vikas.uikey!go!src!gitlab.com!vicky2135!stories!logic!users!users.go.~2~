@@ -1,0 +1,79 @@
+package users
+
+import (
+	"context"
+	"log"
+
+	"gitlab.com/vicky2135/stories/dto"
+	"gitlab.com/vicky2135/stories/exceptions"
+	"gitlab.com/vicky2135/stories/storage/users"
+)
+
+//TODO: mobile number validations, Email Validations, required fields validations, password hashing
+func CreateUser(ctx context.Context, request *dto.CreateUserRequest) (*dto.CreateUserResponse, *exceptions.ErrorResponse) {
+
+	log.Print("Start creating user")
+
+	user := &users.User{}
+	user.Name = request.Name
+	user.Mobile = request.Mobile
+	user.Email = request.Email
+	user.IsMobileVerified = false
+	user.IsEmailVerified = false
+
+	createUserErr := new(exceptions.ErrorResponse)
+
+	// search user by already registered email ID
+	users, dbErr := user.FindByEmail()
+
+	if dbErr != nil {
+		log.Println(dbErr)
+		createUserErr.Build(exceptions.DBReadErrorCode)
+		return nil, createUserErr
+	} else {
+
+		if len(users) > 0 {
+			log.Println("User with this emailId is already registered")
+			createUserErr.Build(exceptions.EmailIdAlreadyRegisteredErrCode)
+			return nil, createUserErr
+		}
+	}
+
+	// search user by already registered mobile number
+	users, dbErr = user.FindByMobile()
+
+	if dbErr != nil {
+		log.Println(dbErr)
+		createUserErr.Build(exceptions.DBReadErrorCode)
+		return nil, createUserErr
+	} else {
+
+		if len(users) > 0 {
+			log.Println("User with this mobile number is already registered")
+			createUserErr.Build(exceptions.MobileNumberAlreaedyRegisteredErrCode)
+			return nil, createUserErr
+		}
+	}
+
+	// save user
+	savingErr := user.Save()
+	if savingErr != nil {
+		log.Fatal("Error While saving user to data base", savingErr)
+		createUserErr.Build(exceptions.DBWriteErrCode)
+		return nil, createUserErr
+	}
+
+	resp := &dto.CreateUserResponse{
+		Id:     string(user.ID),
+		Name:   user.Name,
+		Email:  user.Email,
+		Mobile: user.Mobile,
+		Status: "success",
+	}
+
+	return resp, nil
+}
+
+func UpdateUser(ctx context.Context, request *dto.CreateUserRequest) {
+
+}

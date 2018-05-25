@@ -1,0 +1,16 @@
+package common
+
+const (
+	ClubToPremier = "club_to_premier"
+	ClubToSavings = "club_to_savings"
+)
+
+const (
+	UserLevelClub = 1 << iota
+	UserLevelPremier
+	UserLevelSavings
+)
+
+const (
+	SourceKycService = "KYC_WEB"
+)

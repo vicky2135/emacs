@@ -1,0 +1,250 @@
+package exceptions
+
+import (
+	"fmt"
+	"net/http"
+
+	"bitbucket.org/kyc-agent/external"
+)
+
+type ErrorCode int
+
+const (
+	UnknownError ErrorCode = 1000
+
+	AgentPermissionErrorCode          ErrorCode = 3001
+	AgentSessionSaveErrorCode         ErrorCode = 3002
+	OnProgressSavingsAccountErrorCode ErrorCode = 3101
+	SaveCustomerFormDataHashErrorCode ErrorCode = 3102
+	NoCustomerFoundErrorCode          ErrorCode = 3103
+	RedisReadErrorCode                ErrorCode = 3104
+	RedisWriteErrorCode               ErrorCode = 3105
+	UserBlockedStatusCode             ErrorCode = 3106
+	UserMaxResendLimitErrorCode       ErrorCode = 3107
+	UserMaxOTPAttemptErrorCode        ErrorCode = 3108
+	DoUserBlockingErrorCode           ErrorCode = 3109
+	NoDataFoundInRedis                ErrorCode = 3010
+	SessionReadErrCode                ErrorCode = 3011
+	UnMarshallingErrCode              ErrorCode = 3012
+	MarshallingErrCode                ErrorCode = 3013
+	InvalidOTPErrCode                 ErrorCode = 3014
+	BlockedUserErrCode                ErrorCode = 3015
+	ResourceNotFoundErrCode           ErrorCode = 3016
+	NoOTPFoundErrCode                 ErrorCode = 3017
+	ImageDecodingErrCode              ErrorCode = 3018
+	ImageCreateErrCode                ErrorCode = 3019
+	ImageWriteErrCode                 ErrorCode = 3020
+	ZipCloseErrCode                   ErrorCode = 3021
+	HashGenerateErrCode               ErrorCode = 3022
+	OTPGenerationErrCode              ErrorCode = 3023
+	OTPConfigurationNotFound          ErrorCode = 3024
+	InvalidRedisKeyErrCode            ErrorCode = 3025
+	InvalidCustomerSaveError          ErrorCode = 3026
+	SaveAstinaDataCacheErrorCode      ErrorCode = 3027
+	SaveCustomerOtpStatusErrorCode    ErrorCode = 3028
+	OTPStatusNotConfirmed             ErrorCode = 3029
+	HashVerifyFailedErr               ErrorCode = 3030
+	GenerateHashVerifyFailedErr       ErrorCode = 3031
+	PhoneNumberNotValidErr            ErrorCode = 3032
+	InvalidTargetKycErrCode           ErrorCode = 3033
+
+	// data binding Err
+	CustomerSearchDataBindErr ErrorCode = 3133
+
+	// Api validation Error codes
+	NoMobileNumberErrCode ErrorCode = 4001
+	EmptyOTPCodeErrCode   ErrorCode = 4002
+	EmptyOvoIdErrCode     ErrorCode = 4003
+	EmptyIdCardErrCode    ErrorCode = 4004
+
+	SomethingWentWrong                 = "Something Went Wrong"
+	AgentPermissionDisplayMessage      = "You are not authorized to access the application"
+	AgentSessionSaveErrDisplayMessage  = "Something went Wrong"
+	OnProgressSavingsAccountDisplayMsg = "Saving account is already on progress"
+	NoCustomerFoundMessage             = "No customer found for given phone number"
+	UserBlockedErrorMessage            = "User is temporarily blocked, please try again after some time"
+	UserMaxResendLimitErrMsg           = "Your maximum attempt of generating otp exceeded"
+	UserMaxOTPAttemptErrorMsg          = "You have reached limit of maximum unsuccessful attempts"
+	DoUserBlockingErrMsg               = "We are temporarily suspending the account of user, due to excess invalid otp submissions"
+	InvalidOTPErrMsg                   = "Invlaid error code submitted, please enter correct otp"
+	BlockedUserErrMsg                  = "user account is temporarily blocked, please try again later"
+	ResourceNotFoundErrMsg             = "invalid url, no resource found for requested uri"
+	NoOTPFoundErrMsg                   = "Your session has expired"
+	OTPGenerationCodeErrMsg            = "Something went Wrong"
+	NoOTPConfigurationErrMsg           = "Something went Wrong"
+	HashVerifyFailedErrMessage         = "Bad Request."
+	PhoneNumberNotValidMessage         = "Phone number not valid."
+	InvalidTargetKycErrMessage         = "invalid kyc method passed"
+
+	NoMobileNumberErrMessage = "Mobile number cannot be empty"
+	EmptyOTPCodeErrMessage   = "otp cannot be empty"
+	EmptyOvoIdErrMessage     = "customer idannot be empty"
+	EmptyIdCardErrMessage    = "Id Card cannot be empty"
+)
+
+var (
+	codeToDisplayMessageMapping = map[ErrorCode]string{
+		UnknownError:                      "Unknown Error",
+		AgentPermissionErrorCode:          AgentPermissionDisplayMessage,
+		AgentSessionSaveErrorCode:         AgentSessionSaveErrDisplayMessage,
+		OnProgressSavingsAccountErrorCode: OnProgressSavingsAccountDisplayMsg,
+		SaveCustomerFormDataHashErrorCode: SomethingWentWrong,
+		NoCustomerFoundErrorCode:          NoCustomerFoundMessage,
+		RedisReadErrorCode:                SomethingWentWrong,
+		UserBlockedStatusCode:             UserBlockedErrorMessage,
+		RedisWriteErrorCode:               SomethingWentWrong,
+		UserMaxResendLimitErrorCode:       UserMaxResendLimitErrMsg,
+		UserMaxOTPAttemptErrorCode:        UserMaxOTPAttemptErrorMsg,
+		DoUserBlockingErrorCode:           DoUserBlockingErrMsg,
+		NoDataFoundInRedis:                SomethingWentWrong,
+		SessionReadErrCode:                SomethingWentWrong,
+		UnMarshallingErrCode:              SomethingWentWrong,
+		MarshallingErrCode:                SomethingWentWrong,
+		InvalidOTPErrCode:                 InvalidOTPErrMsg,
+		BlockedUserErrCode:                BlockedUserErrMsg,
+		ResourceNotFoundErrCode:           ResourceNotFoundErrMsg,
+		NoOTPFoundErrCode:                 NoOTPFoundErrMsg,
+		ImageDecodingErrCode:              SomethingWentWrong,
+		ImageCreateErrCode:                SomethingWentWrong,
+		ImageWriteErrCode:                 SomethingWentWrong,
+		ZipCloseErrCode:                   SomethingWentWrong,
+		HashGenerateErrCode:               SomethingWentWrong,
+		OTPGenerationErrCode:              OTPGenerationCodeErrMsg,
+		OTPConfigurationNotFound:          NoOTPConfigurationErrMsg,
+		InvalidRedisKeyErrCode:            SomethingWentWrong,
+		InvalidCustomerSaveError:          SomethingWentWrong,
+		SaveAstinaDataCacheErrorCode:      SomethingWentWrong,
+		SaveCustomerOtpStatusErrorCode:    SomethingWentWrong,
+		OTPStatusNotConfirmed:             SomethingWentWrong,
+		HashVerifyFailedErr:               HashVerifyFailedErrMessage,
+		GenerateHashVerifyFailedErr:       SomethingWentWrong,
+		PhoneNumberNotValidErr:            PhoneNumberNotValidMessage,
+		InvalidTargetKycErrCode:           InvalidTargetKycErrMessage,
+
+		NoMobileNumberErrCode: NoMobileNumberErrMessage,
+		EmptyOTPCodeErrCode:   EmptyOTPCodeErrMessage,
+		EmptyOvoIdErrCode:     EmptyOvoIdErrMessage,
+		EmptyIdCardErrCode:    EmptyIdCardErrMessage,
+	}
+
+	codeToHttpStatusCodeMapping = map[ErrorCode]int{
+		UnknownError:                      http.StatusInternalServerError,
+		AgentPermissionErrorCode:          http.StatusUnauthorized,
+		AgentSessionSaveErrorCode:         http.StatusInternalServerError,
+		OnProgressSavingsAccountErrorCode: http.StatusAlreadyReported,
+		SaveCustomerFormDataHashErrorCode: http.StatusInternalServerError,
+		NoCustomerFoundErrorCode:          http.StatusInternalServerError,
+		RedisReadErrorCode:                http.StatusInternalServerError,
+		UserBlockedStatusCode:             http.StatusUnauthorized,
+		RedisWriteErrorCode:               http.StatusInternalServerError,
+		UserMaxResendLimitErrorCode:       http.StatusNotAcceptable,
+		UserMaxOTPAttemptErrorCode:        http.StatusNotAcceptable,
+		NoDataFoundInRedis:                http.StatusInternalServerError,
+		SessionReadErrCode:                http.StatusInternalServerError,
+		UnMarshallingErrCode:              http.StatusInternalServerError,
+		MarshallingErrCode:                http.StatusInternalServerError,
+		InvalidOTPErrCode:                 http.StatusNotAcceptable,
+		BlockedUserErrCode:                http.StatusNotAcceptable,
+		ResourceNotFoundErrCode:           http.StatusNotFound,
+		NoOTPFoundErrCode:                 http.StatusForbidden,
+		ImageDecodingErrCode:              http.StatusInternalServerError,
+		ImageCreateErrCode:                http.StatusInternalServerError,
+		ImageWriteErrCode:                 http.StatusInternalServerError,
+		ZipCloseErrCode:                   http.StatusInternalServerError,
+		HashGenerateErrCode:               http.StatusInternalServerError,
+		OTPGenerationErrCode:              http.StatusInternalServerError,
+		OTPConfigurationNotFound:          http.StatusInternalServerError,
+		InvalidRedisKeyErrCode:            http.StatusInternalServerError,
+		InvalidCustomerSaveError:          http.StatusBadRequest,
+		SaveAstinaDataCacheErrorCode:      http.StatusInternalServerError,
+		SaveCustomerOtpStatusErrorCode:    http.StatusInternalServerError,
+		OTPStatusNotConfirmed:             http.StatusInternalServerError,
+		HashVerifyFailedErr:               http.StatusBadRequest,
+		GenerateHashVerifyFailedErr:       http.StatusInternalServerError,
+		PhoneNumberNotValidErr:            http.StatusForbidden,
+		InvalidTargetKycErrCode:           http.StatusBadRequest,
+
+		NoMobileNumberErrCode: http.StatusBadRequest,
+		EmptyOTPCodeErrCode:   http.StatusBadRequest,
+		EmptyOvoIdErrCode:     http.StatusBadRequest,
+		EmptyIdCardErrCode:    http.StatusBadRequest,
+	}
+)
+
+type ErrorBuilder interface {
+	Build(int)
+}
+
+type ErrorResponse struct {
+	Code           ErrorCode `json:"code"`
+	Message        string    `json:"message"`
+	HttpStatusCode int       `json:"http_status_code"`
+	DisplayMessage string    `json:"display_message"`
+}
+
+func (err *ErrorResponse) Error() string {
+	return fmt.Sprint(err.Message)
+}
+
+func (err *ErrorResponse) New(code ErrorCode, message string) *ErrorResponse {
+	return &ErrorResponse{
+		Code:    code,
+		Message: message,
+	}
+}
+
+func (err *ErrorResponse) GetHttpStatusCode(code ErrorCode) int {
+	return getHttpStatusCode(code)
+}
+
+func (err *ErrorResponse) GetDisplayMessage(code ErrorCode) string {
+	return getDisplayMessage(code)
+}
+
+func getHttpStatusCode(code ErrorCode) int {
+	if statusCode, ok := codeToHttpStatusCodeMapping[code]; ok {
+		return statusCode
+	}
+	return http.StatusInternalServerError
+}
+
+func getDisplayMessage(code ErrorCode) string {
+	if message, ok := codeToDisplayMessageMapping[code]; ok {
+		return message
+	}
+	return "Something went wrong"
+}
+
+func (err *ErrorResponse) Build(code ErrorCode) {
+	err.Code = code
+	err.DisplayMessage = getDisplayMessage(code)
+	err.Message = getDisplayMessage(code)
+	err.HttpStatusCode = getHttpStatusCode(code)
+}
+
+type KYCError struct {
+	Code    ErrorCode `json:"code"`
+	Message string    `json:"message"`
+}
+
+func (err *KYCError) Error() string {
+	return fmt.Sprint(err.Message)
+}
+
+func (err *KYCError) New(code ErrorCode) *KYCError {
+	return &KYCError{
+		Code:    code,
+		Message: codeToDisplayMessageMapping[code],
+	}
+}
+
+func TransformSDKErrorToKYCError(sdkError external.SDKErrorInterface) *ErrorResponse {
+	err := &ErrorResponse{}
+	if typeCastedError, ok := sdkError.(external.SDKErrorInterface); ok {
+		err.Code = ErrorCode(typeCastedError.GetCode())
+		err.Message = typeCastedError.GetMessage()
+		err.HttpStatusCode = typeCastedError.GetStatusCode()
+		err.DisplayMessage = external.GetDisplayMessage(typeCastedError.GetCode())
+	}
+	return err
+}

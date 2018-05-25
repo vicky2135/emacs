@@ -1,0 +1,123 @@
+package astina
+
+import (
+	"bitbucket.org/kyc-agent/external"
+	"encoding/json"
+)
+
+type SearchCustomerByPhoneRequest struct {
+	Phone  string `json:"value"`
+	Method string `json:"method"`
+}
+
+type Email struct {
+	Address string `json:"address"`
+	Status  string `json:"status"`
+}
+
+type Address struct {
+	Address1   string `json:"address1"`
+	Address2   string `json:"address2"`
+	RT         string `json:"rt"`
+	RW         string `json:"rw"`
+	Village    string `json:"village"`
+	District   string `json:"district"`
+	City       string `json:"city"`
+	Province   string `json:"province"`
+	PostalCode string `json:"postalCode"`
+	Type       string `json:"type"`
+}
+
+type KTP struct {
+	Status        string `json:"status"`
+	NIK           string `json:"NIK"`
+	Gender        string `json:"gender"`
+	MaritalStatus string `json:"maritalStatus"`
+	DateExpired   string `json:"dateExpired"`
+}
+
+type Company struct {
+	CompanyName    string `json:"companyName"`
+	Position       int    `json:"position"`
+	Income         int    `json:"income"`
+	MonthlyExpense int    `json:"monthlyExpense"`
+	FundingSource  int    `json:"fundingSource"`
+	BankRelation   int    `json:"bankRelation"`
+	Pep            int    `json:"pep"`
+}
+
+type SavingAccount struct {
+	DateCreated string `json:"dateCreated"`
+	DateUpdated string `json:"dateUpdated"`
+	// Status
+	OvoID         string `json:"ovoId"`
+	AccountType   string `json:"accountType"`
+	IsTransfer    bool   `json:"isTransfer"`
+	AccountStatus string `json:"accountStatus"`
+}
+
+type NPWPCardDetails struct {
+	TaxId  string `json:"taxId"`
+	Reason int    `json:"reason"`
+}
+
+type Customer struct {
+	KTPImageBase64       string           `json:"ktpImageBase64,omitempty"`
+	NPWPImageBase64      string           `json:"npwpImageBase64,omitempty"`
+	SelfieImageBase64    string           `json:"selfieImageBase64,omitempty"`
+	SignatureImageBase64 string           `json:"signatureImageBase64,omitempty"`
+	OvoID                string           `json:"ovoId"`
+	FullName             string           `json:"fullName"`
+	NickName             string           `json:"nickName"`
+	MobilePhoneNumber    string           `json:"mobilePhoneNumber"`
+	Emails               []*Email         `json:"emails"`
+	Addresses            []*Address       `json:"addresses"`
+	MotherMaidenName     string           `json:"motherMaidenName"`
+	Occupation           int              `json:"occupation"`
+	KTPCard              *KTP             `json:"ktpCard"`
+	NPWPCard             *NPWPCardDetails `json:"npwpCard"`
+	BirthPlace           string           `json:"birthPlace"`
+	DateOfBirth          string           `json:"dateOfBirth"`
+	Company              *Company         `json:"company"`
+	UserLevel            int              `json:"userLevel"`
+	Religion             int              `json:"religion"`
+	Nationality          int              `json:"nationality"`
+	SavingAccountStatus  string           `json:"-"`
+	SavingAccount        []*SavingAccount `json:"savingAccount,omitempty`
+}
+
+type AstinaSDKError struct {
+	Code       external.ErrorCode `json:"code"`
+	Message    string             `json:"message"`
+	StatusCode int                `json:"status_code"`
+}
+
+func (err *AstinaSDKError) Error() string {
+	return err.Message
+}
+
+func (err *AstinaSDKError) Serialize() (string, error) {
+	serializeData, e := json.Marshal(err)
+	if e != nil {
+		return "", e
+	}
+	return string(serializeData[:]), nil
+}
+
+func (c *Customer) String() string {
+	j, _ := json.MarshalIndent(c, "", "  ")
+
+	return string(j)
+}
+
+func (err *AstinaSDKError) GetCode() external.ErrorCode {
+	return err.Code
+}
+
+func (err *AstinaSDKError) GetMessage() string {
+	return err.Message
+}
+
+func (err *AstinaSDKError) GetStatusCode() int {
+	return err.StatusCode
+}

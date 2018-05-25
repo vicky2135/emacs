@@ -1,0 +1,87 @@
+package customer
+
+import (
+	"bitbucket.org/kyc-agent/common/logger"
+	"bitbucket.org/kyc-agent/dto"
+	"bitbucket.org/kyc-agent/exceptions"
+	"bitbucket.org/kyc-agent/external/bounty_hunter"
+	"bitbucket.org/kyc-agent/logic/customer/utils"
+	"fmt"
+	"github.com/gin-gonic/gin"
+)
+
+type docsImage struct {
+	file     string
+	fileName string
+}
+
+type KYC interface {
+	SaveDataToPhantom(string) *exceptions.ErrorResponse
+	SaveDataToFalcon(string) *exceptions.ErrorResponse
+	SaveDataToBountyHunter(string) (*bounty_hunter.AgentReportResponse, error)
+}
+
+type KYCData struct {
+	context      *gin.Context
+	customerData *dto.CustomerData
+	AstinaData   *utils.AstinaCache
+}
+
+func SaveCustomerData(customerData *dto.CustomerData, ctx *gin.Context) (*dto.SaveCustomerDataResponse, *exceptions.ErrorResponse) {
+	requestId := ctx.MustGet("RequestId").(string)
+
+	logger.Info(saveCustomerLogtag, fmt.Sprintf("save customer data process initiated", requestId))
+
+	// read astina data cache from redis
+	astinaCache, astinaCacheErr := utils.ReadCustomerCache(requestId, customerData.OVOID)
+
+	if astinaCacheErr != nil {
+		return nil, astinaCacheErr
+	}
+
+	kycData := &KYCData{
+		context:      ctx,
+		customerData: customerData,
+		AstinaData:   astinaCache,
+	}
+
+	// verify customer account status before saving data
+	cusomterDataVerificationErr := utils.VerifyCustomerData(kycData.customerData, kycData.AstinaData, requestId)
+
+	if cusomterDataVerificationErr != nil {
+		return nil, cusomterDataVerificationErr
+	}
+
+	// upload data to falcon
+	falconError := kycData.SaveDataToFalcon(requestId)
+	if falconError != nil {
+		return nil, falconError
+	}
+
+	// upload data to phantom
+	phantomErr := kycData.SaveDataToPhantom(requestId)
+	if phantomErr != nil {
+		return nil, phantomErr
+	}
+
+	// updating agent report to bounty hunter
+	_, bountyHunterErr := kycData.SaveDataToBountyHunter(requestId)
+	if bountyHunterErr != nil {
+		return nil, bountyHunterErr
+	}
+
+	//expire customer otp status
+	utils.ExpireOTPStatus(kycData.customerData.OVOID, CustomerDataCacheExp)
+
+	//expire astina cache
+	utils.ExpireCustomerData(kycData.customerData.OVOID, CustomerDataCacheExp)
+
+	// build success response
+	SaveCustomerDataResponse := &dto.SaveCustomerDataResponse{
+		Code:    saveCustomerCode,
+		Message: saveCustomerMessage,
+	}
+
+	logger.Info(saveCustomerLogtag, fmt.Sprintf("save customer data process finished", requestId))
+	return SaveCustomerDataResponse, nil
+}

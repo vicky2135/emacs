@@ -1,0 +1,53 @@
+package customer
+
+import (
+	"bitbucket.org/kyc-agent/dto"
+	"bitbucket.org/kyc-agent/exceptions"
+	"bitbucket.org/kyc-agent/logic/customer/utils"
+	"github.com/gin-gonic/gin"
+)
+
+// ClubToPremier is used to update the customer account status to premier from club
+// STEPS to update customer account to premier
+// STEP 1: update customer documents to falcon
+// STEP 2: Update customer data in astina
+// STEP 3: update kyc agent report to bounty-hunter
+
+type ClubToPremier struct{}
+
+// processing STEP 1: uploading customer identity docs to falcon
+func (c *ClubToPremier) UploadDocs(ctx *gin.Context, request *dto.ClubKycRequest, requestId string) *exceptions.ErrorResponse {
+
+	documents := request.Documents
+	// upload documents
+	uploadingErr := uploadBase64Images(ctx, requestId, documents, request.OVOID)
+	if uploadingErr != nil {
+		return uploadingErr
+	}
+
+	return nil
+}
+
+// processing STEP 2: uploading customer data required for premier kyc to astina
+func (c *ClubToPremier) UpgradeToPremier(request *dto.ClubKycRequest, requestId string) *exceptions.ErrorResponse {
+	return upgradeToPremierImpl(request, requestId)
+}
+
+// processing STEP 3: updating myc agent report to bounty-hunter
+func (c *ClubToPremier) FinishKyc(ctx *gin.Context, request *dto.ClubKycRequest, requestId string) *exceptions.ErrorResponse {
+
+	// fetch astina cache to get email and mobile number of customer
+	astinaCache, astinaCacheErr := utils.ReadCustomerCache(requestId, request.OVOID)
+	if astinaCacheErr != nil {
+		// fail to read astina cache from redis cache store
+		return astinaCacheErr
+	}
+
+	//update agent report
+	reportupdateErr := upadteAgentReportForPremierKyc(ctx, requestId, request, astinaCache)
+	if reportupdateErr != nil {
+		return reportupdateErr
+	}
+
+	return nil
+}

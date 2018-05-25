@@ -1,0 +1,96 @@
+package server
+
+import (
+	"net/http"
+	"os"
+
+	"bitbucket.org/kyc-agent/api"
+	"bitbucket.org/kyc-agent/common/utils"
+
+	"bitbucket.org/kyc-agent/common/middlewares/auth"
+	"bitbucket.org/kyc-agent/common/middlewares/session"
+	"bitbucket.org/kyc-agent/common/middlewares/x-request-id"
+	"bitbucket.org/kyc-agent/config"
+	"github.com/gin-contrib/sessions"
+	"github.com/gin-gonic/gin"
+)
+
+const (
+	EnvGinMode                     = "GIN_MODE"
+	GinModeRelease                 = "release"
+	InfoHTTPServerListening        = "Server is listening on port %s"
+	ErrFailedToListenRunHTTPServer = "Server failed to listed: %v"
+	RoutePrefix                    = "/kycweb"
+)
+
+var (
+	ginMode = os.Getenv(EnvGinMode)
+)
+
+func doApiRouting(router *gin.Engine) {
+
+	router.Use(x_request_id.RequestId())
+	router.Use(sessions.Sessions(session.GetSessionConfig().SessionName, session.GetSessionStore()))
+	router.POST(RoutePrefix+"/login", api.LoginApiHandler)
+	router.GET(RoutePrefix+"/ping", Ping)
+
+	// V1 APIS
+	v1 := router.Group(RoutePrefix + "/v1.0")
+
+	v1.Use(auth.Auth)
+	v1.POST("/logout", api.LogoutApiHandler)
+
+	v1.GET("/customer/search", api.SearchCustomerHandler)                       // search by phone number only
+	v1.POST("/customer/data", api.SaveCustomerDataHandler)                      // temporarily save
+	v1.POST("/customer/confirmation/send", api.SendConfirmationCodeHandler)     // send confirmation code
+	v1.POST("/customer/confirmation/verify", api.VerifyConfirmationCodeHandler) // verify confirmation code
+
+	// api handler related to personal information
+	v1.GET("/reference/customer/religion_type", api.GetAllReligionHandler)
+	v1.GET("/reference/master/occupation", api.GetAllOccupationHandler)
+	v1.GET("/reference/customer/marital_status", api.GetMaritalStatusHandler)
+	v1.GET("/reference/job_field", api.GetAllJobFieldsHandler)
+
+	// api handlers for address types
+	v1.GET("/reference/master/province", api.GetAllProvinceHandler)
+	v1.GET("/reference/master/city/:province_code", api.GetAllCitiesByProvinceHandler)
+	v1.GET("/reference/master/district/:city_code", api.GetAllDistrictByCities)
+	v1.GET("/reference/master/villages/:district_code", api.GetAllVillagesByDistrict)
+
+	//api handler Related to fund
+	v1.GET("/reference/customer/source_of_fund", api.GetSourceOfFundHandler)
+	v1.GET("/reference/fund_purpose", api.GetFundPurposeHandler)
+	v1.GET("/reference/customer/expense_range", api.GetExpenseRangeHandler)
+	v1.GET("/reference/employment/income_range", api.GetIncomeRangeHandler)
+
+	// V2 APIS
+	v2 := router.Group(RoutePrefix + "/v2.0")
+	v2.Use(auth.Auth)
+	v2.POST("/customer/data", api.ClubKycHandler)
+
+}
+
+// StartServer will create a server, manage routing and add middleware
+func StartServer() {
+
+	// create new gin engine without any middleware attached
+	router := utils.NewRouter()
+
+	// add recovery middleware
+	// recovery middleware recovers from any panics
+	router.Use(gin.Recovery())
+
+	// if ginMode != GinModeRelease {
+	// 	router.Use(gin.Logger())
+	// }
+
+	doApiRouting(router)
+
+	// FIX: use config to set host address
+	router.Run(config.Config.Server.HostAddress)
+
+}
+
+func Ping(c *gin.Context) {
+	c.String(http.StatusOK, "PONG")
+}

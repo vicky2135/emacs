@@ -1,0 +1,47 @@
+package api
+
+import (
+	"bitbucket.org/kyc-agent/common/logger"
+	"bitbucket.org/kyc-agent/dto"
+	"bitbucket.org/kyc-agent/logic/customer"
+	"fmt"
+	"github.com/gin-gonic/gin"
+)
+
+func SearchCustomerHandler(c *gin.Context) {
+
+	requestId := c.MustGet("RequestId").(string)
+
+	logger.Info(searchCustomerHandlerLogTag, fmt.Sprintf("request recieved to search customer requestId:%s", requestId))
+
+	//bind data
+	search := &dto.CustomerSearch{
+		Phone: c.Query("phone"),
+	}
+
+	customerData, err := customer.SearchCustomer(c, search)
+
+	sendResponseWithStatusCode(c, customerData, err)
+	return
+}
+
+func SaveCustomerDataHandler(c *gin.Context) {
+
+	requestId := c.MustGet("RequestId").(string)
+	logger.Info(saveCustomerDataLogTag, fmt.Sprintf("request received to save customer data requestId:%s", requestId))
+
+	// call logic layer to save data
+
+	customerData := &dto.CustomerData{}
+
+	err := c.Bind(customerData)
+
+	if err != nil {
+		logger.Warn(saveCustomerDataLogTag, "Error while binding data to struct", err)
+	}
+
+	resp, saveErr := customer.SaveCustomerData(customerData, c)
+
+	sendResponseWithStatusCode(c, resp, saveErr)
+	return
+}

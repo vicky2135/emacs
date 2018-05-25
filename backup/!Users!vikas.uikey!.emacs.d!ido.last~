@@ -1,0 +1,46 @@
+;;; -*- coding: utf-8 -*-
+
+;; ----- ido-last-directory-list -----
+(
+ ("/Users/vikas.uikey/go/src/bitbucket.org/" . "kyc-agent/")
+ ("/Users/vikas.uikey/go/src/" . "bitbucket.org/")
+ ("/Users/vikas.uikey/go/" . "src/")
+ ("/Users/vikas.uikey/.emacs.d/" . "custom/")
+ ("/Users/vikas.uikey/" . "go/")
+)
+
+;; ----- ido-work-directory-list -----
+(
+ "/Users/vikas.uikey/go/src/bitbucket.org/kyc-agent/"
+ "/Users/vikas.uikey/.emacs.d/custom/"
+ "/Users/vikas.uikey/.emacs.d/"
+)
+
+;; ----- ido-work-file-list -----
+(
+ "main.go"
+ "golang.el"
+ "custom.el"
+ "init.el"
+ "core.el"
+)
+
+;; ----- ido-dir-file-cache -----
+(
+ ("/Users/vikas.uikey/go/src/bitbucket.org/kyc-agent/" (23293 24698 952949 107000) ".idea/" "vendor/" "main.go" ".git/" "external/" "glide.lock" "docker-compose.yml" "api/" "scripts/" ".gitignore" "common/" "kyc-agent" "exceptions/" "server/" "kyc-agent.json" "logic/" "dao/" "resources/" "Dockerfile" "config/" "configuration-development.json" "validator/" "glide.yaml" "dto/" "../" "./")
+
+ ("/Users/vikas.uikey/go/src/bitbucket.org/" (23293 9495 409278 515000) "kyc-agent/" "digital-marketplace/" "../" "./")
+
+ ("/Users/vikas.uikey/go/src/" (23293 9535 351035 808000) "vendor/" "github.com/" "golang.org/" "bitbucket.org/" ".DS_Store" "../" "./")
+
+ ("/Users/vikas.uikey/go/" (23291 52432 304896 823000) "src/" "pkg/" "bin/" "../" "./")
+
+ ("/Users/vikas.uikey/.emacs.d/" (23294 39296 934928 557000) "backups/" "custom/" "elpa/" "recentf" "init.el" "auto-save-list/" "undo/" ".persistent-scratch" "recentf~" "places" "ido.last~" "smex-items" "init.el~" "ido.last" "savehist" "snippets/" "../" "./")
+
+ ("/Users/vikas.uikey/.emacs.d/custom/" (23294 39305 717811 179000) "golang.el" "core.el~" "golang.el~" "custom.el" "core.el" "custom.el~" "../" "./")
+
+ ("/Users/vikas.uikey/" (23294 30569 47934 754000) ".glide/" ".viminfo" ".bash_history" "Downloads/" ".bash_profile" "Documents/" ".Trash/" "Applications/" "Movies/" ".ssh/" ".cisco/" "Public/" ".bash_sessions/" ".emacs.d/" "Library/" "Desktop/" "Pictures/" ".CFUserTextEncoding" ".DS_Store" "go/" ".anyconnect" "Music/" "../" "./")
+)
+
+;; ----- ido-unc-hosts-cache -----
+t

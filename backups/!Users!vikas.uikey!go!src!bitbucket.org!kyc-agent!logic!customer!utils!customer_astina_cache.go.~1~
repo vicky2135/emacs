@@ -1,0 +1,102 @@
+package utils
+
+import (
+	"bitbucket.org/kyc-agent/common/logger"
+	"bitbucket.org/kyc-agent/common/redis"
+	"bitbucket.org/kyc-agent/exceptions"
+	"bitbucket.org/kyc-agent/external/astina"
+	"encoding/json"
+	"fmt"
+)
+
+const (
+	CustomerDataCacheKey     = "kyc:web:astina:cache:"
+	writeCustomerCacheLogTag = "logic:customer:utils:writeCustomerCache"
+	readCustomerCacheLogTag  = "logic:customer:utils:readCustomerCache"
+)
+
+type AstinaCache struct {
+	OvoId          string                  `json:"ovo_id"`
+	Mobile         string                  `json:"mobile"`
+	EmailIDs       []*astina.Email         `json:"email_ids"`
+	SavingsAccount []*astina.SavingAccount `json:"savings_account"`
+}
+
+func (obj *AstinaCache) SetOvoId(ovoId string) *AstinaCache {
+	obj.OvoId = ovoId
+	return obj
+}
+
+func (obj *AstinaCache) SetMobile(mobile string) *AstinaCache {
+	obj.Mobile = mobile
+	return obj
+}
+
+func (obj *AstinaCache) SetEmailIds(Email []*astina.Email) *AstinaCache {
+	obj.EmailIDs = Email
+	return obj
+}
+
+func (obj *AstinaCache) SetSavingsAccount(account []*astina.SavingAccount) *AstinaCache {
+	obj.SavingsAccount = account
+	return obj
+}
+
+func ExpireCustomerData(ovoId string, expireTime int) {
+	redisKey := CustomerDataCacheKey + ovoId
+	redis.Expire(redisKey, expireTime)
+}
+
+func WriteCustomerCache(requestId, ovoId string, customer *AstinaCache, expireTime ...int) *exceptions.ErrorResponse {
+	saveCustomerCacheKey := CustomerDataCacheKey + ovoId
+
+	saveCustomerErr := &exceptions.ErrorResponse{}
+
+	customerBytes, marshallErr := json.Marshal(customer)
+
+	if marshallErr != nil {
+		logger.Error(writeCustomerCacheLogTag, fmt.Sprintf("Error while marshaling customer data requestId", requestId), marshallErr)
+		saveCustomerErr.Build(exceptions.MarshallingErrCode)
+		return saveCustomerErr
+	}
+
+	cacheWriteErr := redis.Set(saveCustomerCacheKey, customerBytes)
+
+	if cacheWriteErr != nil {
+		logger.Error(writeCustomerCacheLogTag, "Error while making customer cache", cacheWriteErr)
+		saveCustomerErr.Build(exceptions.SaveAstinaDataCacheErrorCode)
+		return saveCustomerErr
+	}
+
+	if expireTime != nil {
+		ExpireCustomerData(ovoId, expireTime[0])
+	}
+
+	return nil
+}
+
+func ReadCustomerCache(requestId, ovoId string) (*AstinaCache, *exceptions.ErrorResponse) {
+
+	customerCacheKey := CustomerDataCacheKey + ovoId
+	readCustomerErr := &exceptions.ErrorResponse{}
+
+	customerDataBytes, redisReadErr := redis.Get(customerCacheKey)
+
+	if redisReadErr != nil {
+		logger.Error(readCustomerCacheLogTag, fmt.Sprintf("Error reading customer cache from redis for requestId: %s", requestId), redisReadErr)
+		readCustomerErr.Build(exceptions.RedisReadErrorCode)
+		return nil, readCustomerErr
+	}
+
+	customer := &AstinaCache{}
+
+	unmarshallErr := json.Unmarshal(customerDataBytes, customer)
+
+	if unmarshallErr != nil {
+		logger.Error(readCustomerCacheLogTag, fmt.Sprintf("Error unmarshalling customer cache to astine.customer for requestId: %s", requestId), unmarshallErr)
+		readCustomerErr.Build(exceptions.UnMarshallingErrCode)
+		return nil, readCustomerErr
+	}
+
+	return customer, nil
+}

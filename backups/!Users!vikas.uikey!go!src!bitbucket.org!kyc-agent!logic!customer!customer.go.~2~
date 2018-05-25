@@ -1,0 +1,83 @@
+package customer
+
+import "bitbucket.org/kyc-agent/external/astina"
+
+// verification
+const (
+	sendConfirmationCodeLogTag   = "logic:customer:SendConfirmationCode"
+	verifyConfirmationCodeLogTag = "logic:customer:VerifyConfirmationCode"
+)
+
+// save customer data
+const (
+	saveCustomerLogtag      = "logic:customer:SaveCustomerData"
+	ktpImageName            = "KTP.jpg"
+	selfieImageName         = "SELFIE.jpg"
+	npwpImageName           = "TAX.jpg"
+	signImageName           = "SIGNATURE.jpg"
+	ZipExtension            = "zip"
+	fileWriterLogTag        = "logic:customer:uploadPictures"
+	md5HashLogTag           = "logic:customer:getMD5"
+	emailStatusEnabled      = "ENABLED"
+	UploadBase64ImageLogTag = "logic:customer:uploadBase64Pictures"
+
+	KTPDocumentType       = "KTP"
+	NPWPDocumentType      = "TAX"
+	SignatureDocumentType = "SIGNATURE"
+	SelfieDocumentType    = "SELFIE"
+)
+
+// search customer
+const (
+	searchCustomerLogTag = "logic:customer:SearchCustomer"
+	getImageLogTag       = "logic:customer:getImage"
+	method               = "mobile"
+	CustomerDataCacheExp = 1
+)
+
+const (
+	customerSendOTPSuccessCode         = 6201
+	customerVerificationOTPSuccessCode = 6202
+	saveCustomerCode                   = 6203
+	customerKycCompletedCode           = 6204
+
+	customerSendOTPSuccessMessage         = "otp successfully sent to the customer"
+	customerVerificationOTPSuccessMessage = "otp successfully verified by customer"
+	saveCustomerMessage                   = "data uploaded successfully"
+	customerKycCompletedMessage           = "customer kyc successfully completed"
+)
+
+// cache ttl
+const (
+	defaultTTL = 1 * 60 * 60
+)
+
+const (
+	uploadDocsLogTag              = "logic:customer:uploadDocs"
+	upgradeAccountToSavingsLogTag = "logic:customer:upgradeAccounttosavings"
+	upadteAgentSavingsKycLogTag   = "logic:customer:upgradeAccountToSavings"
+	Nationality                   = "Y"
+	IndonesiaCountryPrefixCode    = "ID"
+	Addresstype                   = "5"
+	Estimatedtotaldebetamt        = "2"
+	Estimatedtotalcreditamt       = "2"
+)
+
+const (
+	doCustomerKycLogTag         = "logic:customer:DoCustomerKyc"
+	upgradeToPremierImplLogTag  = "logic:customer:upgradeToPremierImpl"
+	upadteAgentPremierKycLogTag = "logic:customer:upadteAgentReportForPremierKyc"
+)
+
+func fetchEmail(emailList []*astina.Email) string {
+
+	var emailAddress string
+	for _, email := range emailList {
+		if email.Status == emailStatusEnabled {
+			emailAddress = email.Address
+		}
+
+	}
+
+	return emailAddress
+}

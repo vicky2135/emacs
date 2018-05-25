@@ -1,0 +1,57 @@
+package dto
+
+import "bitbucket.org/kyc-agent/external/falcon"
+
+type ClubKycRequest struct {
+	OVOID                   string          `json:"ovoid"`
+	IDCardNumber            string          `json:"id_card_number"`
+	MotherMaidenName        string          `json:"mother_maiden_name"`
+	Sex                     string          `json:"sex"`
+	Birthplace              string          `json:"birthplace"`
+	BirthdayString          string          `json:"birthday_string"`
+	Birthday                string          `json:"birthday"`
+	Address                 string          `json:"address"`
+	Province                string          `json:"province"`
+	City                    string          `json:"city"`
+	District                string          `json:"district"`
+	Village                 string          `json:"village"`
+	RWNumber                string          `json:"rw_number"`
+	RTNumber                string          `json:"rt_number"`
+	Religion                string          `json:"religion"`
+	MarriageStatus          string          `json:"marriage_status"`
+	IDCardExpiryDateString  string          `json:"id_card_expiry_date_string"`
+	IDCardExpiryDate        string          `json:"id_card_expiry_date"`
+	NPWPNumber              string          `json:"npwp_number"`
+	NPWPExistence           string          `json:"npwp_existence"`
+	FamilyCardNumber        string          `json:"family_card_number"` // new field for premier kyc
+	WorkTitle               string          `json:"work_title"`
+	WorkField               string          `json:"work_field"`
+	IncomeSource            int             `json:"income_source"`
+	IncomeMonthlyRange      string          `json:"income_monthly_range"`
+	ExpenseMonthly          string          `json:"expense_monthly"`
+	AccountPurpose          int             `json:"account_purpose"`
+	CompanyName             string          `json:"company_name"`
+	CompanyProvince         string          `json:"company_province"`
+	CompanyCity             string          `json:"company_city"`
+	CompanyDistrict         string          `json:"company_district"`
+	CompanyVillage          string          `json:"company_village"`
+	CompanyPostalCode       string          `json:"company_postal_code"`
+	CorrespondenceSimilarTo string          `json:"correspondence_similar_to"`
+	CorrespondenceAddress   string          `json:"correspondence_address"`
+	CorrespondenceProvince  string          `json:"correspondence_province"`
+	CorrespondenceCity      string          `json:"correspondence_city"`
+	CorrespondenceDistrict  string          `json:"correspondence_district"`
+	CorrespondenceVillage   string          `json:"correspondence_village"`
+	CorrespondenceRWNumber  string          `json:"correspondence_rw_number"`
+	CorrespondenceRTNumber  string          `json:"correspondence_rt_number"`
+	BranchCodeOpening       string          `json:"branch_code_opening"`
+	CustomerName            string          `json:"customer_name"`
+	LocationCode            string          `json:"location_code"`
+	TargetKycLevel          int             `json:"target_kyc_level"`
+	Documents               []*falcon.Image `json:"documents"`
+}
+
+type ClubKycResponse struct {
+	Code    int    `json:"code"`
+	Message string `json:"message"`
+}

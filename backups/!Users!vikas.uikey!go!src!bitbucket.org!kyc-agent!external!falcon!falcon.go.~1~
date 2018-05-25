@@ -1,0 +1,122 @@
+package falcon
+
+import (
+	"fmt"
+
+	"bitbucket.org/kyc-agent/common/http_client"
+	"bitbucket.org/kyc-agent/common/logger"
+	"bitbucket.org/kyc-agent/common/utils/hmac"
+	"bitbucket.org/kyc-agent/external"
+	"net/http"
+)
+
+//ovoId string, documentType string
+func getImage(request *GetImageRequest, requestID string) (*GetImageResponse, *FalconSDKError) {
+	logger.Info(logGetImage, "Fetching image from falcon requestID: %v", requestID)
+
+	var statusCode int
+	var err error
+	var resp interface{}
+
+	//generate hmac
+	hmacCode := hmac.Generate()
+
+	httpRequest := http_client.New()
+	httpRequest.SetUrl(request.ImageUrl).SetHeader("content-type", "application/json").SetHeader("random", hmacCode.Random).
+		SetHeader("app-id", hmacCode.AppID).SetHeader("hmac", hmacCode.Token).SetMethod(http_client.GET).
+		SetResponseOK(&GetImageResponse{})
+
+	statusCode, resp, err = falconHttpClient.Request(&httpRequest)
+
+	switch response := resp.(type) {
+	case *GetImageResponse:
+		logger.Info(logGetImage, "Recieved response from falcon for requestID: %s Statuscode: %d", requestID, statusCode)
+		return response, nil
+	default:
+		if err != nil && statusCode == 0 {
+			logger.Error(logGetImage, "Error occurred while fetching images from falcon for requestID: %s Statuscode: %d, error: %v",
+				requestID, statusCode, err)
+			return nil, &FalconSDKError{Code: external.PreRequestProcessingError, Message: err.Error(), StatusCode: http.StatusInternalServerError}
+		} else if err != nil {
+			logger.Error(logGetImage, "Error occurred while fetching images from falcon for requestID: %s Statuscode: %d, error: %v, resp: %+v",
+				requestID, statusCode, err, resp)
+			return nil, &FalconSDKError{Code: external.HttpRequestError, Message: err.Error(), StatusCode: statusCode}
+		} else {
+			logger.Error(logGetImage, fmt.Sprintf("Response: %+v", resp))
+			return nil, &FalconSDKError{Code: external.UnknownError, Message: "Something went wrong", StatusCode: statusCode}
+		}
+	}
+}
+
+func uploadImage(request *UploadImageRequest, requestID string) (*UploadImageResponse, *FalconSDKError) {
+	logger.Info(logUploadImage, "Uploading image to falcon requestID: %v", requestID)
+
+	var statusCode int
+	var err error
+	var resp interface{}
+
+	//generate hmac
+	hmacCode := hmac.Generate()
+
+	httpRequest := http_client.New()
+	httpRequest.SetUrl(uploadImageUrl).SetHeader("random", hmacCode.Random).
+		SetHeader("app-id", hmacCode.AppID).SetHeader("hmac", hmacCode.Token).SetMethod(http_client.PUT).SetContentType("multipart/form-data").
+		SetResponseOK(&UploadImageResponse{}).SetFormData(request).SetFile(request.FileKey, request.Filename, request.File)
+
+	statusCode, resp, err = falconHttpClient.Request(&httpRequest)
+
+	switch response := resp.(type) {
+	case *UploadImageResponse:
+		logger.Info(logUploadImage, "Received response from falcon for requestID: %s Statuscode: %d", requestID, statusCode)
+		return response, nil
+	default:
+		if err != nil && statusCode == 0 {
+			logger.Error(logUploadImage, "Error occurred while uploading images to falcon for requestID: %s Statuscode: %d, error: %v",
+				requestID, statusCode, err)
+			return nil, &FalconSDKError{Code: external.PreRequestProcessingError, Message: err.Error(), StatusCode: http.StatusInternalServerError}
+		} else if err != nil {
+			logger.Error(logUploadImage, "Error occurred while uploading images to falcon for requestID: %s Statuscode: %d, error: %v, resp: %+v",
+				requestID, statusCode, err, resp)
+			return nil, &FalconSDKError{Code: external.HttpRequestError, Message: err.Error(), StatusCode: statusCode}
+		} else {
+			logger.Error(logUploadImage, fmt.Sprintf("Response: %+v", string(resp.([]byte))[:]))
+			return nil, &FalconSDKError{Code: external.UnknownError, Message: "Something went wrong", StatusCode: statusCode}
+		}
+	}
+}
+
+func getMetadata(request *GetMetaDataRequest, requestID string) (GetMetaDataResponse, *FalconSDKError) {
+	logger.Info(logGetMetaData, "Fetching image from falcon requestID: %v", requestID)
+
+	var statusCode int
+	var err error
+	var resp interface{}
+
+	httpRequest := http_client.New()
+	httpRequest.SetUrl(request.MetaDataUrl).SetHeader("content-type", "application/json").SetMethod(http_client.GET).
+		SetResponseOK(GetMetaDataResponse{})
+
+	statusCode, resp, err = falconHttpClient.Request(&httpRequest)
+
+	switch response := resp.(type) {
+	case GetMetaDataResponse:
+		logger.Info(logGetMetaData, "Recieved response from falcon for requestID: %s Statuscode: %d", requestID, statusCode)
+		return response, nil
+	default:
+		if err != nil && statusCode == 0 {
+			logger.Error(logGetMetaData, "Error occurred while fetching metadata from falcon for requestID: %s Statuscode: %d, error: %v",
+				requestID, statusCode, err)
+			return nil, &FalconSDKError{Code: external.PreRequestProcessingError, Message: err.Error(), StatusCode: http.StatusInternalServerError}
+		} else if err != nil {
+			logger.Error(logGetMetaData, "Error occurred while fetching metadata from falcon for requestID: %s Statuscode: %d, error: %v, resp: %+v",
+				requestID, statusCode, err, resp)
+			return nil, &FalconSDKError{Code: external.HttpRequestError, Message: err.Error(), StatusCode: statusCode}
+		} else {
+			if statusCode == 200 && resp == "{}" {
+				return nil, &FalconSDKError{Code: external.ImageMetaDataNotFound, Message: "Image meta data not found", StatusCode: external.GetHttpStatusCode(external.ImageMetaDataNotFound)}
+			}
+			logger.Error(logGetMetaData, fmt.Sprintf("Response: %+v", resp))
+			return nil, &FalconSDKError{Code: external.UnknownError, Message: "Something went wrong", StatusCode: statusCode}
+		}
+	}
+}

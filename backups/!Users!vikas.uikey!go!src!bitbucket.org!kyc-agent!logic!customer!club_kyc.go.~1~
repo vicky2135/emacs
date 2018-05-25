@@ -1,0 +1,125 @@
+package customer
+
+import (
+	"bitbucket.org/kyc-agent/exceptions"
+	"bitbucket.org/kyc-agent/dto"
+	"bitbucket.org/kyc-agent/common/logger"
+	"fmt"
+	"bitbucket.org/kyc-agent/external/astina"
+	"bitbucket.org/kyc-agent/common"
+	"github.com/gin-gonic/gin"
+)
+
+const (
+	doCustomerKycLogTag = "logic:customer:DoCustomerKyc"
+	upgradeToPremierImplLogTag = "logic:customer:upgradeToPremierImpl"
+)
+
+// club kyc interface is used to update customer account status
+// From club to premier
+// From club to savings
+type ClubKyc interface {
+
+
+	UpgradeToPremier(request *dto.ClubKycRequest, requestId string) *exceptions.ErrorResponse
+	UploadDocs(request *dto.ClubKycRequest, requestId string) *exceptions.ErrorResponse
+	FinishKyc(ctx *gin.Context, request *dto.ClubKycRequest, requestId string) *exceptions.ErrorResponse
+}
+
+// func DoCustomerKyc takes data from api layer and start customer kyc for validated data
+// it supports 2 kyc process :-
+// 1. club to premier
+// 2. club to savings
+// for premier to savings refer func SaveCustomerData
+func DoCustomerKyc(ctx *gin.Context, request *dto.ClubKycRequest, requestId string) (*dto.ClubKycResponse, *exceptions.ErrorResponse){
+
+	logger.Info(doCustomerKycLogTag, fmt.Sprintf("initiating customer kyc for requestId %s", requestId))
+
+	customerKycErr := &exceptions.ErrorResponse{}
+
+	// fetch target kyc level user requested for
+	clubKyc := getUpdater(request.TargetKyc)
+
+	// fail if invalid target kyc level is passed down
+	if clubKyc == nil {
+		logger.Info(doCustomerKycLogTag, fmt.Sprintf("error unknown target kyc, for requestId %s", requestId))
+		customerKycErr.Build(exceptions.InvalidTargetKycErrCode)
+		return nil, customerKycErr
+	}
+
+	// upload customer docs
+	uploadDocsErr := clubKyc.UploadDocs(request, requestId)
+	if uploadDocsErr != nil {
+		return nil, uploadDocsErr
+	}
+
+	// upgrade to customer account to premier
+	premierErr := clubKyc.UpgradeToPremier(request, requestId)
+	if premierErr != nil {
+		return nil, premierErr
+	}
+
+	// finish kyc
+	finishErr := clubKyc.FinishKyc(ctx, request, requestId)
+	if finishErr != nil {
+		return nil, premierErr
+	}
+
+	// build success response and return to agent
+	resp := &dto.ClubKycResponse{
+		Code: customerKycCompletedCode,
+		Message: customerKycCompletedMessage,
+	}
+	return resp, nil
+}
+
+
+// get Updater return target kyc object
+func getUpdater(targetKyc string) ClubKyc {
+
+	switch targetKyc {
+
+	case common.ClubToPremier:
+		return new(ClubToPremier)
+
+	case common.ClubToSavings:
+		return new(ClubToSavings)
+	}
+
+	return nil
+}
+
+// function to pass down the request to astinasdk to update customer account status to premier
+func upgradeToPremierImpl(r *dto.ClubKycRequest, requestId string) *exceptions.ErrorResponse {
+
+	logger.Info(upgradeToPremierImplLogTag, fmt.Sprintf("passing data to astina for updating customer account status to premier for requestId", requestId))
+
+	request := &astina.ClubToPremier{
+		FullName:r.CustomerName,
+		BirthPlace:r.Birthplace,
+		BirthDate:r.BirthdayString,
+		Gender:r.Sex,
+		AddressDetail:r.Address,
+		AddressRW:r.RWNumber,
+		AddressRT:r.RTNumber,
+		ProvinceCode:r.Province,
+		CityCode:r.City,
+		District:r.District,
+		Village:r.Village,
+		ReligionCode:r.Religion,
+		KTPDateExpired:r.IDCardExpiryDateString,
+		NIK:r.IDCardNumber,
+		MothersMaiderName:r.MotherMaidenName,
+		FamilyCardNumber:r.FamilyCardNumber,
+		Source:r.Source,
+	}
+
+	_, err := astina.UpgradeAccountToPremier(request, requestId)
+
+	if err != nil {
+		return exceptions.TransformSDKErrorToKYCError(err)
+	}
+
+	logger.Info(upgradeToPremierImplLogTag, fmt.Sprintf("customer account status successfully updated to premier for requestId", requestId))
+	return nil
+}

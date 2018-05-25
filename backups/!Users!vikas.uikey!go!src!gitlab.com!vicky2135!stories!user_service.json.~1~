@@ -1,0 +1,8 @@
+{
+  "internalHostAndPort": "127.0.01:8080",
+  "mysql": {
+    "driver_name": "mysql",
+    "dsn": "root:admin@tcp(127.0.0.1:3306)/Drag?parseTime=true",
+    "max_connections":1000
+  }
+}

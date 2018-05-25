@@ -1,0 +1,89 @@
+package customer
+
+import (
+	"bitbucket.org/kyc-agent/dto"
+	"bitbucket.org/kyc-agent/exceptions"
+	"bitbucket.org/kyc-agent/logic/customer/utils"
+	"github.com/gin-gonic/gin"
+)
+
+// ClubToPremier is used to update the customer account status to premier from club
+// STEPS to update customer account to premier
+// STEP 1: Update customer data in astina from club to premier
+// STEP 2: update customer documents to falcon
+// STEP 3: after customer upgraded from club to premier, process premier to savings steps
+
+type ClubToSavings struct{}
+
+// processing STEP 1: uploading customer identity docs to falcon
+func (c *ClubToSavings) UploadDocs(ctx *gin.Context, request *dto.ClubKycRequest, requestId string) *exceptions.ErrorResponse {
+
+	documents := request.Documents
+	// upload documetsw
+	uploadingErr := uploadBase64Images(ctx, requestId, documents, request.OVOID)
+	if uploadingErr != nil {
+		return uploadingErr
+	}
+
+	return nil
+}
+
+// processing STEP 2: uploading customer data required for premier kyc to astina
+func (c *ClubToSavings) UpgradeToPremier(request *dto.ClubKycRequest, requestId string) *exceptions.ErrorResponse {
+	return upgradeToPremierImpl(request, requestId)
+}
+
+// processing STEP 3: updating customer from premier to savings
+// STEP 0: Update agent report in bountyhunter for completing premier kyc
+// STEP I: Upload Zipped docs to falcon
+// STEP II: Update Customer from premier to savings
+// STEP III: Update Agent Report
+func (c *ClubToSavings) FinishKyc(ctx *gin.Context, request *dto.ClubKycRequest, requestId string) *exceptions.ErrorResponse {
+
+	// fetch astina cache to get email and mobile number of customer
+	astinaCache, astinaCacheErr := utils.ReadCustomerCache(requestId, request.OVOID)
+	if astinaCacheErr != nil {
+		// fail to read astina cache from redis cache store
+		return astinaCacheErr
+	}
+
+	// STEP 0: update agent report
+	reportupdateErr := upadteAgentReportForPremierKyc(ctx, requestId, request, astinaCache)
+	if reportupdateErr != nil {
+		return reportupdateErr
+	}
+
+	// do savings kyc
+
+	// STEP 1: Upload Zipped Docs to phantom
+	uploadingErr := c.UploadZippedDocs(requestId, request)
+	if uploadingErr != nil {
+		return uploadingErr
+	}
+
+	// STEP 2: Upload Data to phantom, on success which update customer account to savings
+	accountUpgradingErr := c.UpgradeToSavings(requestId, request, astinaCache)
+	if accountUpgradingErr != nil {
+		return accountUpgradingErr
+	}
+
+	// STEP 3: Update Agent report on bounty hunter on successfully upgradation to savings account
+	reportUpdateErr := c.FinishSavingsKyc(ctx, requestId, request, astinaCache)
+	if reportUpdateErr != nil {
+		return reportUpdateErr
+	}
+
+	return nil
+}
+
+func (c *ClubToSavings) UploadZippedDocs(requestId string, request *dto.ClubKycRequest) *exceptions.ErrorResponse {
+	return uploadDocs(requestId, request)
+}
+
+func (c *ClubToSavings) UpgradeToSavings(requestId string, request *dto.ClubKycRequest, astinaCache *utils.AstinaCache) *exceptions.ErrorResponse {
+	return upgradeAccountToSavings(requestId, request, astinaCache)
+}
+
+func (c *ClubToSavings) FinishSavingsKyc(ctx *gin.Context, requestId string, request *dto.ClubKycRequest, astinaCache *utils.AstinaCache) *exceptions.ErrorResponse {
+	return updateAgentReportForSavingsKyc(ctx, requestId, request, astinaCache)
+}
