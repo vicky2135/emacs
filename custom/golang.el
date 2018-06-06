@@ -17,6 +17,7 @@
   (local-set-key (kbd "M-P") 'recompile)          ; Redo most recent compile cmd
   (local-set-key (kbd "M-]") 'next-error)         ; Go to next error (or msg)
   (local-set-key (kbd "M-[") 'previous-error)
+  (go-guru-hl-identifier-mode t)
 )
 
 (defun jc/go-guru-set-current-package-as-main ()
@@ -25,11 +26,12 @@
      active go guru scope, assuming it contains a main"
     (interactive)
     (let* ((filename (buffer-file-name))
-           (gopath-src-path (concat (file-name-as-directory (go-guess-gopath)) "~/go/src/bitbucket.org/kyc-agent"))
+           (gopath-src-path (concat (file-name-as-directory (go-guess-gopath)) "/Users/vikas.uikey/go/src/bitbucket.org/kyc-agent"))
            (relative-package-path (directory-file-name (file-name-directory (file-relative-name filename gopath-src-path)))))
       (setq go-guru-scope relative-package-path)))
 
 (add-hook 'go-mode-hook 'my-go-mode-hook)
+(add-hook 'go-mode-hook 'jc/go-guru-set-current-package-as-main)
 (require 'go-projectile)
 (add-hook 'after-init-hook #'global-flycheck-mode)
 (defun auto-complete-for-go ()

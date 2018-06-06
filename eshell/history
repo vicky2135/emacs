@@ -1,21 +1,3 @@
-cd ap
-cd api/
-ls
-mkdir todo
-ls
-cd todo/
-ls
-touch todo.go
-mkdir events
-ls
-rm events/
-ls
-cd ..
-kls
-ls
-mkdir events
-ls
-cd ../to
 cd ../exceptions/
 ls
 cd ../api/events/
@@ -126,3 +108,21 @@ mkdir todoDTO
 s
 ks
 ls
+;s
+ls
+cd ..
+ls
+ls
+mkdir validations
+ls
+cd validations
+ls
+touch field_validator.go
+cd ..
+rm -rf validations
+ls -ak
+ls -al
+ls
+go run temp.go 
+ 3023   500 Something went Wrong
+go run temp.go 

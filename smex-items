@@ -1,21 +1,21 @@
 
 ;; ----- smex-history -----
 (
- life
- load-theme
- undo-tree-visualize
- delete-file
- snake
- json-pretty-print
+ twit
+ list-packages
+ package-install
+ go-projectile-git-grep
+ projectile-grep
+ eshell
  pwd
 )
 
 ;; ----- smex-data -----
 (
- (package-install . 7)
+ (package-install . 8)
  (whitespace-mode . 1)
  (whitespace-cleanup . 4)
- (list-packages . 6)
+ (list-packages . 7)
  (projectile-switch-open-project . 2)
  (neotree . 1)
  (godef-jump . 2)
@@ -25,12 +25,12 @@
  (go-projectile-install-tools . 1)
  (go-play-buffer . 1)
  (list-faces-display . 1)
- (go-playground . 1)
+ (go-playground . 4)
  (go-guru-callees . 3)
- (go-projectile-git-grep . 1)
+ (go-projectile-git-grep . 3)
  (go-tag-refresh . 3)
  (go-tag-add . 11)
- (magit-diff . 2)
+ (magit-diff . 6)
  (magit-log . 2)
  (godoc . 1)
  (eldoc-mode . 1)
@@ -39,24 +39,24 @@
  (go-guru-set-scope . 7)
  (pwd . 20)
  (jc/go-guru-set-current-package-as-main . 1)
- (magit-status . 1)
+ (magit-status . 2)
  (magit-checkout . 1)
  (magit-checkout-file . 1)
  (projectile-mode . 4)
  (projectile-clear-known-projects . 1)
- (projectile-grep . 4)
+ (projectile-grep . 7)
  (flycheck-mode . 1)
  (rename-file . 8)
- (linum-mode . 3)
+ (linum-mode . 4)
  (flycheck-error-list-mode . 2)
  (go-mode . 1)
- (eshell . 10)
+ (eshell . 13)
  (projectile-edit-dir-locals . 1)
  (delete-file . 4)
  (undo-tree-visualizer-toggle-diff . 1)
  (undo-tree-mode . 2)
- (undo-tree-visualize . 3)
- (json-pretty-print . 2)
+ (undo-tree-visualize . 4)
+ (json-pretty-print . 5)
  (flycheck-next-error . 2)
  (set-background-color . 2)
  (json-mode . 1)
@@ -64,8 +64,20 @@
  (go-tag-remove . 1)
  (projectile-browse-dirty-projects . 1)
  (flycheck-error-list-next-error . 2)
- (uncomment-region . 1)
+ (uncomment-region . 4)
  (magit-branch . 1)
- (snake . 1)
+ (snake . 2)
  (life . 4)
+ (read-kbd-macro . 1)
+ (comment-region . 4)
+ (replace-regexp . 5)
+ (go-guru-hl-identifier . 11)
+ (capitalize-dwim . 8)
+ (go-rename . 3)
+ (magit . 1)
+ (compile . 1)
+ (go-playground-exec . 1)
+ (go-playground-save-and-run . 1)
+ (twit . 1)
+ (twittering-search . 3)
 )

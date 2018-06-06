@@ -1,3 +1,0 @@
-"3fb077bdce452cfd9f5c854ba0312c96e148a596"
-[cl-struct-undo-tree [nil ([nil ([nil (#1=[nil nil ((1448 . 1478) (#("	Code    int `json:\"code\"`
-" 0 1 (fontified t face whitespace-tab) 1 13 (fontified t) 13 26 (fontified t face font-lock-string-face) 26 27 (fontified t)) . -1448) (undo-tree-id0 . -12) (undo-tree-id1 . -9) (undo-tree-id2 . -9) (undo-tree-id3 . -9) (undo-tree-id4 . -11) (undo-tree-id5 . -12) (undo-tree-id6 . -12) 1460) nil (23303 49790 85538 0) 0 nil]) ((1457 . 1460)) nil (23303 49790 85546 0) 0 nil]) ((#("string" 0 6 (fontified t)) . 1457) (undo-tree-id7 . -6) (undo-tree-id8 . -6) (t 23301 17874 539613 362000)) nil (23303 49790 85555 0) 0 nil]) nil nil (23303 49790 85565 0) 0 nil] #1# 153 3 nil]

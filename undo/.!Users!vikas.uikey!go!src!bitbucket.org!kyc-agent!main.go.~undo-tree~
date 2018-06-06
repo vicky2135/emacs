@@ -1,3 +1,0 @@
-"808ca12ae62c349890da03f6fbc9bc3eb52bc2a4"
-[cl-struct-undo-tree [nil ([nil ([nil (#1=[nil nil ((#(" " 0 1 (fontified t)) . -714) (undo-tree-id2 . -1) (undo-tree-id3 . -1) (undo-tree-id4 . -1) 715) nil (23295 55932 415414 0) 0 nil]) ((#("no initial packages were loaded" 0 31 (fontified t)) . -715) (undo-tree-id5 . -31) (undo-tree-id6 . -31) 746) nil (23295 55932 415440 0) 0 nil] [nil nil ((579 . 581)) ((#("
-	" 0 1 (fontified t) 1 2 (fontified t face whitespace-tab)) . 579) (undo-tree-id0 . -2) (undo-tree-id1 . 2)) (23294 49426 777563 0) 0 nil]) ((714 . 746) (t 23294 42686 69222 622000)) nil (23294 49426 777634 0) 0 nil]) nil nil (23294 49426 777569 0) 0 nil] #1# 154 4 nil]

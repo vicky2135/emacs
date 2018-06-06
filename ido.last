@@ -2,13 +2,16 @@
 
 ;; ----- ido-last-directory-list -----
 (
+ ("/Users/vikas.uikey/go/src/bitbucket.org/kyc-agent/vendor/github.com/gin-gonic/" . "gin/")
+ ("/Users/vikas.uikey/go/src/bitbucket.org/kyc-agent/vendor/" . "github.com/")
+ ("/Users/vikas.uikey/.emacs.d/elpa/" . "go-guru-20170718.1046/")
  ("/Users/vikas.uikey/Desktop/" . "org/")
  ("/Users/vikas.uikey/go/src/bitbucket.org/kyc-agent/vendor/github.com/gin-contrib/sessions/" . "cookie/")
- ("/Users/vikas.uikey/go/src/bitbucket.org/kyc-agent/vendor/github.com/gin-contrib/" . "sessions/")
- ("/Users/vikas.uikey/go/src/bitbucket.org/kyc-agent/vendor/github.com/" . "gin-contrib/")
- ("/Users/vikas.uikey/go/src/bitbucket.org/kyc-agent/common/" . "redis/")
+ ("/Users/vikas.uikey/go/src/bitbucket.org/kyc-agent/vendor/github.com/gin-contrib/" . "sse/")
+ ("/Users/vikas.uikey/go/src/bitbucket.org/kyc-agent/vendor/github.com/" . "gin-gonic/")
+ ("/Users/vikas.uikey/go/src/bitbucket.org/kyc-agent/common/" . "http_client/")
  ("/Users/vikas.uikey/go/src/bitbucket.org/kyc-agent/common/middlewares/" . "session/")
- ("/Users/vikas.uikey/go/src/bitbucket.org/kyc-agent/external/" . "bounty_hunter/")
+ ("/Users/vikas.uikey/go/src/bitbucket.org/kyc-agent/external/" . "falcon/")
  ("/Users/vikas.uikey/go/src/gitlab.com/vicky2135/stories/dto/" . "todoDTO/")
  ("/Users/vikas.uikey/go/src/gitlab.com/vicky2135/stories/vendor/" . "github.com/")
  ("/Users/vikas.uikey/go/src/gitlab.com/vicky2135/stories/commons/" . "funnel/")
@@ -20,7 +23,7 @@
  ("/Users/vikas.uikey/go/src/gitlab.com/vicky2135r/stories/" . "config/")
  ("/Users/vikas.uikey/go/src/gitlab.com/vicky2135r/" . "stories/")
  ("/Users/vikas.uikey/go/src/gitlab.com/" . "vicky2135/")
- ("/Users/vikas.uikey/go/src/bitbucket.org/kyc-agent/logic/" . "agent/")
+ ("/Users/vikas.uikey/go/src/bitbucket.org/kyc-agent/logic/" . "customer/")
  ("/Users/vikas.uikey/go/src/bitbucket.org/kyc-agent/" . "logic/")
  ("/Users/" . "vikas.uikey/")
  ("/" . "Users/")
@@ -33,14 +36,28 @@
 
 ;; ----- ido-work-directory-list -----
 (
- "/Users/vikas.uikey/go/src/bitbucket.org/kyc-agent/external/astina/"
- "/Users/vikas.uikey/go/src/bitbucket.org/kyc-agent/dto/"
- "/Users/vikas.uikey/.emacs.d/custom/"
- "/Users/vikas.uikey/go/src/bitbucket.org/kyc-agent/external/bounty_hunter/"
- "/Users/vikas.uikey/go/src/bitbucket.org/kyc-agent/external/phantom/"
- "/Users/vikas.uikey/go/src/bitbucket.org/kyc-agent/external/moenia/"
- "/Users/vikas.uikey/go/src/bitbucket.org/kyc-agent/logic/agent/"
+ "/Users/vikas.uikey/go/src/bitbucket.org/kyc-agent/logic/customer/"
  "/Users/vikas.uikey/Desktop/org/"
+ "/Users/vikas.uikey/go/src/bitbucket.org/kyc-agent/dto/"
+ "/Users/vikas.uikey/go/src/bitbucket.org/kyc-agent/"
+ "/Users/vikas.uikey/go/src/bitbucket.org/kyc-agent/logic/agent/"
+ "/Users/vikas.uikey/.emacs.d/custom/"
+ "/Users/vikas.uikey/.emacs.d/elpa/go-guru-20170718.1046/"
+ "/Users/vikas.uikey/.emacs.d/elpa/go-mode-20180327.830/"
+ "/Users/vikas.uikey/.emacs.d/elpa/god-mode-20180117.334/"
+ "/Users/vikas.uikey/.emacs.d/"
+ "/Users/vikas.uikey/go/src/bitbucket.org/kyc-agent/external/falcon/"
+ "/Users/vikas.uikey/go/src/bitbucket.org/kyc-agent/external/phantom/"
+ "/Users/vikas.uikey/go/src/bitbucket.org/kyc-agent/external/bounty_hunter/"
+ "/Users/vikas.uikey/go/src/bitbucket.org/kyc-agent/external/astina/"
+ "/Users/vikas.uikey/go/src/bitbucket.org/kyc-agent/api/"
+ "/Users/vikas.uikey/go/src/bitbucket.org/kyc-agent/logic/customer/utils/"
+ "/Users/vikas.uikey/go/src/bitbucket.org/kyc-agent/logic/otp/"
+ "/Users/vikas.uikey/go/src/bitbucket.org/kyc-agent/validator/"
+ "/Users/vikas.uikey/go/src/bitbucket.org/kyc-agent/exceptions/"
+ "/Users/vikas.uikey/go/src/gitlab.com/vicky2135/stories/storage/users/"
+ "/Users/vikas.uikey/go/src/bitbucket.org/kyc-agent/common/http_client/"
+ "/Users/vikas.uikey/go/src/bitbucket.org/kyc-agent/external/moenia/"
  "/Users/vikas.uikey/go/src/bitbucket.org/kyc-agent/common/middlewares/session/"
  "/Users/vikas.uikey/go/src/bitbucket.org/kyc-agent/external/mobile_banker/"
  "/Users/vikas.uikey/go/src/bitbucket.org/kyc-agent/vendor/github.com/gin-contrib/sessions/cookie/"
@@ -49,14 +66,10 @@
  "/Users/vikas.uikey/go/src/gitlab.com/vicky2135/stories/dto/todoDTO/"
  "/Users/vikas.uikey/go/src/gitlab.com/vicky2135/stories/api/todo/"
  "/Users/vikas.uikey/go/src/gitlab.com/vicky2135/stories/logic/todos/"
- "/Users/vikas.uikey/go/src/bitbucket.org/kyc-agent/logic/customer/"
  "/Users/vikas.uikey/"
  "/Users/vikas.uikey/go/src/bitbucket.org/kyc-agent/server/"
  "/Users/vikas.uikey/go/src/bitbucket.org/kyc-agent/common/middlewares/auth/"
- "/Users/vikas.uikey/go/src/bitbucket.org/kyc-agent/external/falcon/"
- "/Users/vikas.uikey/go/src/bitbucket.org/kyc-agent/"
  "/Users/vikas.uikey/go/src/gitlab.com/vicky2135/stories/storage/eventStorage/"
- "/Users/vikas.uikey/go/src/gitlab.com/vicky2135/stories/storage/users/"
  "/Users/vikas.uikey/go/src/gitlab.com/vicky2135/stories/config/"
  "/Users/vikas.uikey/go/src/gitlab.com/vicky2135/stories/logic/events/"
  "/Users/vikas.uikey/go/src/gitlab.com/vicky2135/stories/commons/funnel/"
@@ -73,59 +86,103 @@
  "/Users/vikas.uikey/go/src/gitlab.com/vicky2135/stories/"
  "/Users/vikas.uikey/go/src/gitlab.com/vicky2135/stories/api/"
  "/Users/vikas.uikey/go/src/gitlab.com/vicky2135r/stories/config/"
- "/Users/vikas.uikey/go/src/gitlab.com/vicky2135r/stories/"
- "/Users/vikas.uikey/.emacs.d/"
 )
 
 ;; ----- ido-work-file-list -----
 (
- "sdk.go"
- "astina.go"
+ "club_kyc.go"
+ "premier_to_savings.go"
+ "premier_to_savings_impl.go"
+ "search_customer.go"
  "club_to_premier.go"
+ "config.org"
  "customer.go"
- "core.el"
- "dto.go"
- "phantom.go"
- "moenia.go"
- "c_to_p_dto.go"
- "agent_utils.go"
+ "todo.org"
+ "main.go"
+ "savings_kyc.go"
 )
 
 ;; ----- ido-dir-file-cache -----
 (
- ("/Users/vikas.uikey/go/src/bitbucket.org/kyc-agent/" (23303 47348 974190 125000) ".idea/" "vendor/" ".#jsong" "main.go" ".git/" "external/" "glide.lock" "docker-compose.yml" "api/" "scripts/" ".gitignore" "common/" "kyc-agent" "exceptions/" "server/" "kyc-agent.json" "logic/" "dao/" "#kyc-agent.json#" "resources/" "Dockerfile" "config/" "configuration-development.json" "validator/" "glide.yaml" "dto/" "../" "./")
+ ("/Users/vikas.uikey/go/src/bitbucket.org/kyc-agent/logic/customer/" (23319 32942 48124 196000) "customer.go" "club_to_premier.go" "#premier_to_savings_impl.go#" "falcon.go" "search_customer.go" ".#search_customer.go" "#search_customer.go#" "club_kyc.go" "premier_to_savings.go" "utils/" "premier_to_savings_impl.go" "club_to_savings.go" "challenge_code.go" "#club_to_savings.go#" "savings_kyc.go" "../" "./")
 
- ("/Users/vikas.uikey/go/src/bitbucket.org/kyc-agent/external/astina/" (23303 46863 516377 660000) "club_to_premier.go" "dto.go" "#club_to_premier.go#" "c_to_p_dto.go" "astina.go" "sdk.go" "../" "./")
+ ("/Users/vikas.uikey/go/src/bitbucket.org/kyc-agent/logic/customer/utils/" (23319 33043 628657 844000) "customer_astina_cache.go" "customer_verification.go" "#kyc_request_cache.go#" "kyc_request_cache.go" "../" "./")
 
- ("/Users/vikas.uikey/.emacs.d/" (23303 45350 530729 4000) "backups/" "custom/" "backup/" "elpa/" "recentf" "gotools/" "init.el" "auto-save-list/" "undo/" ".persistent-scratch" "projectile.cache" "recentf~" "projectile-bookmarks.eld" "places" "ido.last~" "eshell/" "smex-items" "init.el~" "ido.last" "savehist" "snippets/" "ac-comphist.dat" "../" "./")
+ ("/Users/vikas.uikey/go/src/bitbucket.org/kyc-agent/exceptions/" (23318 29229 624143 821000) "error.go" "../" "./")
 
- ("/Users/vikas.uikey/go/src/bitbucket.org/kyc-agent/dto/" (23301 17874 536604 164000) "customer.go" "login.go" "dto.go" "club_kyc.go" "moenia.go" "#club_kyc.go#" "../" "./")
+ ("/Users/vikas.uikey/go/src/bitbucket.org/kyc-agent/server/" (23311 48794 807736 210000) "internal.go" "server.go" "#internal.go#" "../" "./")
 
- ("/Users/vikas.uikey/go/src/bitbucket.org/kyc-agent/external/falcon/" (23301 17874 540372 971000) "dto.go" "falcon.go" "sdk.go" "../" "./")
+ ("/Users/vikas.uikey/go/src/bitbucket.org/kyc-agent/common/middlewares/session/" (23310 29082 813832 412000) "session_store.go" "serializer.go" "session.go" "../" "./")
 
- ("/Users/vikas.uikey/go/src/bitbucket.org/kyc-agent/server/" (23302 37595 215335 697000) ".#internal.go" "internal.go" "server.go" "#internal.go#" "../" "./")
+ ("/Users/vikas.uikey/go/src/bitbucket.org/kyc-agent/validator/" (23310 35753 548942 11000) "validator.go" "../" "./")
 
- ("/Users/vikas.uikey/go/src/bitbucket.org/kyc-agent/logic/customer/" (23303 42080 259225 504000) "customer.go" "club_to_premier.go" "falcon.go" "search_customer.go" ".#search_customer.go" "#search_customer.go#" "club_kyc.go" "premier_to_savings.go" "utils/" "premier_to_savings_impl.go" "club_to_savings.go" "verification.go" "savings_kyc.go" "../" "./")
+ ("/Users/vikas.uikey/go/src/bitbucket.org/kyc-agent/api/" (23311 38693 62644 310000) "customer.go" "api.go" "agent.go" "club_kyc.go" "moenia.go" "verification.go" "../" "./")
 
- ("/Users/vikas.uikey/go/src/bitbucket.org/kyc-agent/common/redis/" (23301 17879 35241 2000) "pool.go" "utils.go" "cluster.go" "../" "./")
+ ("/Users/vikas.uikey/go/src/bitbucket.org/kyc-agent/external/falcon/" (23310 19017 249948 663000) "dto.go" "falcon.go" "#dto.go#" "#falcon.go#" "sdk.go" "../" "./")
 
- ("/Users/vikas.uikey/go/src/bitbucket.org/kyc-agent/vendor/github.com/gorilla/sessions/" (23301 19318 516534 764000) ".travis.yml" "doc.go" "README.md" "sessions_test.go" "store.go" "LICENSE" "sessions.go" "lex.go" "store_test.go" "../" "./")
+ ("/Users/vikas.uikey/.emacs.d/" (23316 65239 467873 990000) "backups/" "custom/" "backup/" ".git/" "elpa/" "recentf" "gotools/" "init.el" "auto-save-list/" "undo/" ".persistent-scratch" "projectile.cache" "projectile-bookmarks.eld" "places" "eshell/" "smex-items" ".mc-lists.el" "ido.last" "savehist" "snippets/" "ac-comphist.dat" "../" "./")
+
+ ("/Users/vikas.uikey/.emacs.d/elpa/go-guru-20170718.1046/" (23310 19017 249252 942000) "go-guru-autoloads.el" "go-guru-pkg.el" "#go-guru-autoloads.el#" "go-guru.elc" "go-guru.el" "../" "./")
+
+ ("/Users/vikas.uikey/.emacs.d/custom/" (23310 19008 434317 441000) "golang.el" "core.el~" "golang.el~" "custom.el" "core.el" "custom.el~" "../" "./")
+
+ ("/Users/vikas.uikey/go/src/bitbucket.org/kyc-agent/logic/agent/" (23310 30532 280048 502000) "agent.go" "agent_utils.go" "../" "./")
+
+ ("/Users/vikas.uikey/go/src/bitbucket.org/kyc-agent/dto/" (23316 55182 893861 423000) "customer.go" "login.go" "dto.go" "club_kyc.go" "moenia.go" "../" "./")
+
+ ("/Users/vikas.uikey/Desktop/org/" (23312 53066 530499 495000) "todo.org" "config.org" ".#todo.org" "#todo.org#" "../" "./")
+
+ ("/Users/vikas.uikey/go/src/bitbucket.org/kyc-agent/" (23312 53895 987297 35000) ".idea/" "vendor/" "main.go" ".git/" "external/" "glide.lock" "docker-compose.yml" "api/" "scripts/" ".gitignore" "common/" "kyc-agent" "exceptions/" "server/" "kyc-agent.json" "logic/" "dao/" "#kyc-agent.json#" "resources/" "Dockerfile" "config/" "configuration-development.json" "validator/" "glide.yaml" "dto/" "../" "./")
+
+ ("/Users/vikas.uikey/Desktop/" (23311 42303 259886 950000) "temp.go" "org/" ".localized" ".DS_Store" "Screen Shot 2018-05-28 at 12.30.04 PM.png" "Screen Shot 2018-05-31 at 11.35.22 AM.png" "untitled folder/" "../" "./")
+
+ ("/Users/vikas.uikey/Downloads/" (23311 37288 375054 728000) "invoice-32593.pdf" "Skype-8.21.0.7.dmg" "kyc_web_spec.docx" "OVO CLUB KYC 2.0.zip" "kyc_web_spec.pages" "Postman.app/" "astina_endpoint_kyc.docx" "Postman-osx-6.0.10.zip" "Full Flow CLUB -_ TOP (Bypass) KTP.jpg" "Docker.dmg" "test.png" "Online Payment Terms & conditions.pdf" "OVO CLUB KYC 2.0/" "new_kyc_web.docx" "Stride.dmg" ".localized" "sequel-pro-1.1.2.dmg" ".DS_Store" "OnBoarding - Agent - EMoney_V2.pdf" "goland-2018.1.3.dmg" "../" "./")
+
+ ("/Users/vikas.uikey/go/src/bitbucket.org/kyc-agent/vendor/github.com/gin-gonic/gin/" (23308 16718 752120 610000) "gin.go" "wercker.yml" "test_helpers.go" "errors.go" "logger_test.go" "githubapi_test.go" "debug_test.go" "vendor/" "benchmarks_test.go" ".travis.yml" "path.go" "fixtures/" "context_appengine.go" "recovery_test.go" "mode.go" "response_writer.go" "tree_test.go" "utils.go" "examples/" "context.go" "fs.go" "logo.jpg" ".gitignore" "debug.go" "response_writer_test.go" "routergroup_test.go" "context_test.go" "README.md" "binding/" "routergroup.go" "routes_test.go" "ginS/" "render/" "deprecated.go" "logger.go" "middleware_test.go" "BENCHMARKS.md" "Makefile" "gin_integration_test.go" "path_test.go" "CHANGELOG.md" "auth.go" "LICENSE" "tree.go" "auth_test.go" "mode_test.go" "errors_test.go" "recovery.go" "utils_test.go" "codecov.yml" "AUTHORS.md" "gin_test.go" "../" "./")
+
+ ("/Users/vikas.uikey/go/src/bitbucket.org/kyc-agent/vendor/github.com/gin-gonic/" (23308 16718 485259 728000) "gin/" "../" "./")
+
+ ("/Users/vikas.uikey/go/src/bitbucket.org/kyc-agent/vendor/github.com/gin-contrib/sse/" (23308 16718 539922 517000) ".travis.yml" "sse-encoder.go" "sse_test.go" "sse-decoder_test.go" "sse-decoder.go" "writer.go" "README.md" "LICENSE" "../" "./")
+
+ ("/Users/vikas.uikey/go/src/bitbucket.org/kyc-agent/vendor/github.com/gin-contrib/" (23308 16718 492980 163000) "sse/" "../" "./")
+
+ ("/Users/vikas.uikey/go/src/bitbucket.org/kyc-agent/vendor/github.com/" (23308 16718 506100 536000) "mattn/" "satori/" "ugorji/" "gin-contrib/" "garyburd/" "golang/" "gin-gonic/" "chasex/" "go-resty/" "gorilla/" "../" "./")
+
+ ("/Users/vikas.uikey/go/src/bitbucket.org/kyc-agent/vendor/" (23308 16718 506891 664000) "github.com/" "golang.org/" "go.uber.org/" "gopkg.in/" "../" "./")
+
+ ("/Users/vikas.uikey/Desktop/untitled folder/" (23305 52287 46169 319000) "../" "./")
+
+ ("/Users/vikas.uikey/.emacs.d/elpa/god-mode-20180117.334/" (23310 18629 520620 741000) "god-mode.el" "god-mode-pkg.el" "god-mode-autoloads.el" "god-mode-isearch.el" "god-mode-isearch.elc" "god-mode.elc" "../" "./")
+
+ ("/Users/vikas.uikey/.emacs.d/elpa/go-mode-20180327.830/" (23310 18585 601130 511000) "go-mode.el" "go-mode-pkg.el" "go-mode.elc" "go-mode-autoloads.el" "../" "./")
+
+ ("/Users/vikas.uikey/.emacs.d/elpa/" (23298 41411 118326 857000) "flx-ido-20180117.719/" "shell-toggle-20150226.611/" "golden-ratio-20150819.420/" "ghub-20180417.1527/" "go-projectile-20170302.1705/" "nameless-readme.txt" "projectile-20180507.129/" "smooth-scrolling-20161002.1249/" "go-eldoc-20170305.627/" "popup-20160709.729/" "nlinum-1.8.1/" "auto-complete-20170124.1845/" "know-your-http-well-20160208.1504/" "ibuffer-projectile-20180324.2025/" "async-20180424.2250/" "magit-20180517.1443/" "go-autocomplete-readme.txt" "gntp-20141024.1950/" "org-bullets-20171127.526/" "wgrep-ag-20160923.403/" "org-alert-20180413.2111/" "nlinum-relative-20160526.8/" "yasnippet-20180513.1004/" "shell-pop-20170304.616/" "flx-ido-readme.txt" "alert-20180403.38/" "f-20180106.122/" "swiper-20180402.1857/" "smex-20151212.1409/" "web-completion-data-20160318.148/" "pkg-info-20150517.443/" "git-commit-20180411.1649/" "restclient-20180316.851/" "s-20180406.108/" "spinner-1.7.3/" "rg-20180404.315/" "git-gutter-20161105.656/" "company-20180501.11/" "page-break-lines-20171210.31/" "undo-tree-0.6.5/" "smex-readme.txt" "with-editor-20180414.757/" "expand-region-20171217.2125/" "company-web-20180402.455/" "zop-to-char-20160212.754/" "json-mode-0.1/" "spacemacs-theme-20180319.736/" "dash-20180413.30/" "exec-path-from-shell-readme.txt" "god-mode-20180117.334/" "pos-tip-20150318.813/" "company-quickhelp-20180323.1200/" "volatile-highlights-20160611.1855/" "wgrep-20141016.1656/" "flycheck-20180509.845/" "magit-popup-20180509.1041/" "anzu-20161017.907/" "archives/" "fancy-battery-20150101.404/" "iy-go-to-char-readme.txt" "all-the-icons-20180125.757/" "flycheck-readme.txt" "memoize-20170720.1802/" "imenu-anywhere-20170805.1155/" "go-projectile-readme.txt" "ivy-20180515.1057/" "flx-20151030.1112/" "spaceline-20180507.303/" "smartparens-20180430.220/" "log4e-20170401.604/" "paradox-20180216.334/" "bind-key-20180512.2130/" "which-key-20180426.733/" "go-playground-20170226.43/" "use-package-20180314.1143/" "neotree-20170522.758/" "epl-20180205.1249/" "go-guru-20170718.1046/" "spaceline-all-the-icons-20170829.120/" "persistent-scratch-20180425.1811/" "go-playground-readme.txt" "beacon-20171017.1540/" "exec-path-from-shell-20180323.1904/" "gotest-20180319.137/" "move-text-20170908.2030/" "hydra-20180508.1008/" "fold-this-20180224.40/" "go-tag-20180226.2011/" "let-alist-1.0.5/" "go-autocomplete-20170626.323/" "eshell-git-prompt-20170909.752/" "dashboard-20180328.807/" "dumb-jump-20180507.2133/" "flymake-go-20150714.33/" "company-restclient-20151202.401/" "seq-2.20/" "go-mode-20180327.830/" "markdown-mode-20180124.138/" "go-rename-20161117.331/" "counsel-20180517.1140/" "powerline-20180321.1948/" "avy-20180514.1100/" "multiple-cursors-20180406.1350/" "smooth-scroll-20130321.2114/" "../" "./")
+
+ ("/Users/vikas.uikey/" (23310 18281 814373 702000) ".glide/" ".viminfo" ".bash_history" "Downloads/" ".rediscli_history" ".bash_profile" ".mysql_history" "Documents/" ".Trash/" "Applications/" "Movies/" ".ssh/" ".cisco/" "Public/" ".bash_sessions/" ".dlv/" ".emacs.d/" "#temp#" "Library/" "Desktop/" "Pictures/" ".CFUserTextEncoding" ".DS_Store" "go/" ".vim/" ".anyconnect" "Music/" "../" "./")
+
+ ("/Users/vikas.uikey/go/src/bitbucket.org/kyc-agent/external/phantom/" (23309 694 482298 270000) "dto.go" "phantom.go" "sdk.go" "../" "./")
+
+ ("/usr/local/go/src/encoding/base64/" (23271 32528 0 0) "base64_test.go" "base64.go" "example_test.go" "../" "./")
+
+ ("/Users/vikas.uikey/go/src/bitbucket.org/kyc-agent/common/redis/" (23307 49556 980097 772000) "pool.go" "utils.go" "cluster.go" "../" "./")
+
+ ("/Users/vikas.uikey/go/src/bitbucket.org/kyc-agent/vendor/github.com/gorilla/sessions/" (23308 16718 567320 458000) ".travis.yml" "doc.go" "README.md" "sessions_test.go" "store.go" "LICENSE" "sessions.go" "lex.go" "store_test.go" "../" "./")
+
+ ("/Users/vikas.uikey/go/src/bitbucket.org/kyc-agent/logic/otp/" (23291 55541 308259 757000) "otp_generation.go" "otp_impl.go" "otp_verification.go" "otp.go" "otp_store.go" "logger.go" "contants.go" "sdk.go" "../" "./")
+
+ ("/Users/vikas.uikey/go/src/bitbucket.org/kyc-agent/logic/" (23307 57801 644017 211000) "customer/" "agent/" "logic.go" "otp/" "moenia/" "../" "./")
+
+ ("/Users/vikas.uikey/go/src/bitbucket.org/kyc-agent/common/" (23307 56020 710987 690000) "utils/" "middlewares/" "constants.go" "redis/" "logger/" "http_client/" "../" "./")
+
+ ("/Users/vikas.uikey/go/src/gitlab.com/vicky2135/stories/logic/todos/" (23303 48211 229978 494000) "todo.go" "../" "./")
+
+ ("/Users/vikas.uikey/go/src/bitbucket.org/kyc-agent/external/astina/" (23306 65207 846051 362000) "club_to_premier.go" "dto.go" "#club_to_premier.go#" "astina.go" "sdk.go" "../" "./")
+
+ ("/Users/vikas.uikey/go/src/bitbucket.org/kyc-agent/common/http_client/" (23303 55089 332677 519000) "http_request.go" "http_client.go" "../" "./")
 
  ("/Users/vikas.uikey/go/src/bitbucket.org/kyc-agent/vendor/github.com/gin-contrib/sessions/cookie/" (23301 17242 277048 984000) "cookie.go" "cookie_test.go" "../" "./")
 
- ("/Users/vikas.uikey/go/src/bitbucket.org/kyc-agent/common/middlewares/session/" (23302 25655 980657 798000) "session_store.go" "serializer.go" "session.go" "../" "./")
-
- ("/Users/vikas.uikey/Desktop/org/" (23302 25834 143964 796000) ".#config.org" "#config.org#" "config.org" "../" "./")
-
- ("/Users/vikas.uikey/go/src/bitbucket.org/kyc-agent/logic/agent/" (23302 36085 809361 534000) "agent.go" "agent_utils.go" "../" "./")
-
- ("/Users/vikas.uikey/go/src/bitbucket.org/kyc-agent/external/phantom/" (23291 55541 164596 580000) "dto.go" "phantom.go" "sdk.go" "../" "./")
-
  ("/Users/vikas.uikey/go/src/bitbucket.org/kyc-agent/external/moenia/" (23291 55541 163795 579000) "dto.go" "moenia.go" "sdk.go" "../" "./")
-
- ("/Users/vikas.uikey/Desktop/" (23302 25733 797929 463000) "org/" ".localized" ".DS_Store" "../" "./")
-
- ("/Users/vikas.uikey/" (23301 23221 361640 83000) ".glide/" ".viminfo" ".bash_history" "Downloads/" ".rediscli_history" ".bash_profile" ".mysql_history" "Documents/" ".Trash/" "Applications/" "Movies/" ".ssh/" ".cisco/" "Public/" ".bash_sessions/" ".dlv/" ".emacs.d/" "Library/" "Desktop/" "Pictures/" ".CFUserTextEncoding" ".DS_Store" "go/" ".vim/" ".anyconnect" "Music/" "../" "./")
 
  ("/Users/vikas.uikey/go/src/bitbucket.org/kyc-agent/common/middlewares/auth/" (23302 25555 285163 786000) "agent_auth.go" "../" "./")
 
@@ -133,17 +190,9 @@
 
  ("/Users/vikas.uikey/go/src/bitbucket.org/kyc-agent/vendor/github.com/gin-contrib/sessions/" (23301 10234 223031 587000) "vendor/" ".travis.yml" "cookie/" "mongo/" "tester/" ".gitignore" "example_mongo/" "memcached/" "README.md" "example_redis/" "example_memcached/" "redis/" "LICENSE" "sessions.go" "example_cookie/" "../" "./")
 
- ("/Users/vikas.uikey/go/src/bitbucket.org/kyc-agent/vendor/github.com/gin-contrib/" (23301 10234 151299 305000) "sessions/" "sse/" "../" "./")
-
- ("/Users/vikas.uikey/go/src/bitbucket.org/kyc-agent/vendor/github.com/" (23301 10234 144831 570000) "mattn/" "satori/" "ugorji/" "gin-contrib/" "garyburd/" "golang/" "boj/" "gin-gonic/" "chasex/" "go-resty/" "gorilla/" "../" "./")
-
  ("/Users/vikas.uikey/go/src/bitbucket.org/kyc-agent/vendor/github.com/gorilla/" (23301 10234 155070 356000) "sessions/" "context/" "securecookie/" "../" "./")
 
- ("/Users/vikas.uikey/go/src/bitbucket.org/kyc-agent/common/" (23299 56861 642801 382000) "utils/" "middlewares/" "constants.go" "redis/" "logger/" "http_client/" "../" "./")
-
  ("/Users/vikas.uikey/go/src/bitbucket.org/kyc-agent/vendor/github.com/garyburd/redigo/redis/" (23291 56533 983411 652000) "conn.go" "list_test.go" "script.go" "pool.go" "reply.go" "scan_test.go" "pool_test.go" "pool17.go" "conn_test.go" "reply_test.go" "redis.go" "doc.go" "pubsub.go" "scan.go" "test_test.go" "redis_test.go" "go16.go" "pubsub_test.go" "go17.go" "script_test.go" "go18.go" "pool17_test.go" "pubsub_example_test.go" "zpop_example_test.go" "log.go" "../" "./")
-
- ("/Users/vikas.uikey/go/src/gitlab.com/vicky2135/stories/logic/todos/" (23301 2702 941740 239000) ".#todo.go" "#todo.go#" "../" "./")
 
  ("/Users/vikas.uikey/go/src/gitlab.com/vicky2135/stories/dto/todoDTO/" (23301 3916 725809 965000) "todo_dto.go" "../" "./")
 
@@ -151,15 +200,9 @@
 
  ("/Users/vikas.uikey/go/src/gitlab.com/vicky2135/stories/logic/" (23301 2635 860437 897000) "events/" "todos/" "users/" "../" "./")
 
- ("/Users/vikas.uikey/go/src/bitbucket.org/kyc-agent/logic/customer/utils/" (23298 43677 924741 344000) "customer_astina_cache.go" "#customer_astina_cache.go#" "customer_verification.go" ".#customer_astina_cache.go" "kyc_request_cache.go" "../" "./")
-
  ("/Users/vikas.uikey/.ssh/" (23291 10307 54672 860000) "known_hosts" "authorized_keys.jcorig" "id_rsa.pub" "authorized_keys" "id_rsa" "../" "./")
 
  ("/Users/vikas.uikey/go/src/" (23298 39503 978511 492000) "vendor/" "gitlab.com/" "github.com/" "golang.org/" "bitbucket.org/" "playground/" ".DS_Store" "../" "./")
-
- ("/Users/vikas.uikey/.emacs.d/custom/" (23298 41409 889103 297000) "golang.el" "core.el~" "golang.el~" "custom.el" "core.el" "custom.el~" "../" "./")
-
- ("/Users/vikas.uikey/go/src/bitbucket.org/kyc-agent/exceptions/" (23298 30943 592743 387000) "error.go" "../" "./")
 
  ("/Users/vikas.uikey/go/src/bitbucket.org/kyc-agent/common/utils/" (23291 55541 155684 295000) "uuid.go" "rest.go" "hmac/" "../" "./")
 
@@ -217,15 +260,9 @@
 
  ("/Users/vikas.uikey/go/src/gitlab.com/vicky2135r/" (23295 56627 856806 769000) "stories/" "../" "./")
 
- ("/Users/vikas.uikey/go/src/bitbucket.org/kyc-agent/common/http_client/" (23293 23936 51757 689000) "http_request.go" "http_client.go" "../" "./")
-
  ("/Users/vikas.uikey/go/src/bitbucket.org/kyc-agent/external/bounty_hunter/" (23295 55225 249132 107000) "dto.go" "#sdk.go#" "bounty_hunter.go" "sdk.go" "../" "./")
 
  ("/Users/vikas.uikey/go/src/bitbucket.org/digital-marketplace/" (23293 9506 546943 745000) "bitbucket-pipelines.yml" "Dockerfile.build" ".idea/" "docker_linux" "vendor/" "main.go" ".git/" "config_files/" "external/" "glide.lock" "docker-compose.yml" "cacert.pem" "api/" ".gitignore" "register/" "common/" "Dockerfile.scratch" "README.md" "storage/" ".gitmodules" "deployDocker.sh" "digital-marketplace-config.json" "server/" "logic/" "config/" "sqlscripts/" "workflow_defs/" "glide.yaml" "dto/" "../" "./")
-
- ("/Users/vikas.uikey/go/src/bitbucket.org/kyc-agent/api/" (23293 24839 294152 871000) "customer.go" "api.go" "agent.go" "club_kyc.go" "moenia.go" "verification.go" "../" "./")
-
- ("/Users/vikas.uikey/go/src/bitbucket.org/kyc-agent/logic/" (23291 55541 306802 720000) "customer/" "agent/" "logic.go" "otp/" "moenia/" "../" "./")
 
  ("/Users/vikas.uikey/go/src/bitbucket.org/kyc-agent/external/" (23291 55541 164810 666000) "phantom/" "protocolroid/" "falcon/" "external.go" "bounty_hunter/" "mobile_banker/" "astina/" "moenia/" "../" "./")
 

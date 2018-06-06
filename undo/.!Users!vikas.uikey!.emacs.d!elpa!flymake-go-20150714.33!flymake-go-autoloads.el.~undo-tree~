@@ -1,6 +1,0 @@
-"e83f37f874d254da3366ffc2a19268a1289e4ef9"
-[cl-struct-undo-tree [nil (#1=[nil nil ((276 . 284) (245 . 253) (173 . 268) (#("
-;;;### (autoloads nil nil (\"flymake-go.el\") (23295 58587 748747 731000))
-
-;;;***
-" 0 83 (fontified nil)) . -173) (undo-tree-id0 . -83) (t 23295 58587 787515 771000)) nil (23295 58603 595060 0) 0 nil]) nil nil (23295 58603 595064 0) 0 nil] #1# 131 1 nil]
