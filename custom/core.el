@@ -170,6 +170,8 @@
   (yas-global-mode 1)
   :diminish (yas-minor-mode . "Ⓨ"))
 
+(nyan-mode 1)
+
 ;;;;;;;;;;;;;;;;
 ;; Editing ;;
 ;;;;;;;;;;;;;;;;
@@ -182,6 +184,12 @@
          ("C-<" . mc/mark-previous-like-this)
          ("C-c m" . mc/mark-all-dwim)
          ("M-<down-mouse-1>" . mc/add-cursor-on-click)))
+
+(use-package string-inflection)
+(global-set-key (kbd "C-c i") 'string-inflection-cycle)
+(global-set-key (kbd "C-c C") 'string-inflection-camelcase)        ;; Force to CamelCase
+(global-set-key (kbd "C-c L") 'string-inflection-lower-camelcase)  ;; Force to lowerCamelCase
+(global-set-key (kbd "C-c J") 'string-inflection-java-style-cycle) ;; Cycle through Java styles
 
 (use-package align
   :bind (("C-x a a" . align)

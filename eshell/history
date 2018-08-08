@@ -1,14 +1,3 @@
-cd ../exceptions/
-ls
-cd ../api/events/
-ls
-touch events.go
-ls
-cd ../todo/
-ls
-rm events
-ls
-rm -r events
 cd ../..
 ls
 ls
@@ -124,5 +113,16 @@ ls -ak
 ls -al
 ls
 go run temp.go 
- 3023   500 Something went Wrong
+3023   500 Something went Wrong
 go run temp.go 
+ls
+cd ..
+ls
+cd ..
+ls
+cd vikas.uikey/
+ls
+cd go/
+s
+cd src/
+ls

@@ -4,8 +4,11 @@
 (setq mc/cmds-to-run-for-all
       '(
         org-self-insert-command
+        smex
         ))
 
 (setq mc/cmds-to-run-once
       '(
+        indent-for-tab-command
+        mouse-start-secondary
         ))

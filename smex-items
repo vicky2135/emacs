@@ -1,36 +1,36 @@
 
 ;; ----- smex-history -----
 (
- twit
- list-packages
- package-install
- go-projectile-git-grep
- projectile-grep
- eshell
- pwd
+ go-fill-struct
+ gotests-region
+ rectangular-region-mode
+ uncomment-region
+ comment-region
+ undo-tree-visualize
+ delete-file
 )
 
 ;; ----- smex-data -----
 (
- (package-install . 8)
+ (package-install . 9)
  (whitespace-mode . 1)
  (whitespace-cleanup . 4)
- (list-packages . 7)
+ (list-packages . 12)
  (projectile-switch-open-project . 2)
  (neotree . 1)
  (godef-jump . 2)
  (pop-tag-mark . 6)
  (load-file . 1)
- (load-theme . 6)
+ (load-theme . 8)
  (go-projectile-install-tools . 1)
  (go-play-buffer . 1)
  (list-faces-display . 1)
- (go-playground . 4)
+ (go-playground . 11)
  (go-guru-callees . 3)
  (go-projectile-git-grep . 3)
  (go-tag-refresh . 3)
- (go-tag-add . 11)
- (magit-diff . 6)
+ (go-tag-add . 12)
+ (magit-diff . 7)
  (magit-log . 2)
  (godoc . 1)
  (eldoc-mode . 1)
@@ -46,16 +46,16 @@
  (projectile-clear-known-projects . 1)
  (projectile-grep . 7)
  (flycheck-mode . 1)
- (rename-file . 8)
+ (rename-file . 10)
  (linum-mode . 4)
  (flycheck-error-list-mode . 2)
  (go-mode . 1)
- (eshell . 13)
+ (eshell . 14)
  (projectile-edit-dir-locals . 1)
- (delete-file . 4)
+ (delete-file . 5)
  (undo-tree-visualizer-toggle-diff . 1)
  (undo-tree-mode . 2)
- (undo-tree-visualize . 4)
+ (undo-tree-visualize . 5)
  (json-pretty-print . 5)
  (flycheck-next-error . 2)
  (set-background-color . 2)
@@ -64,20 +64,32 @@
  (go-tag-remove . 1)
  (projectile-browse-dirty-projects . 1)
  (flycheck-error-list-next-error . 2)
- (uncomment-region . 4)
+ (uncomment-region . 8)
  (magit-branch . 1)
  (snake . 2)
  (life . 4)
  (read-kbd-macro . 1)
- (comment-region . 4)
+ (comment-region . 12)
  (replace-regexp . 5)
  (go-guru-hl-identifier . 11)
  (capitalize-dwim . 8)
- (go-rename . 3)
+ (go-rename . 6)
  (magit . 1)
- (compile . 1)
+ (compile . 3)
  (go-playground-exec . 1)
  (go-playground-save-and-run . 1)
- (twit . 1)
+ (twit . 2)
  (twittering-search . 3)
+ (go-fill-struct . 20)
+ (magit-diff-buffer-file . 5)
+ (go-play-region . 1)
+ (godoctor-extract . 9)
+ (godoctor-extract-dry-run . 2)
+ (calendar-mayan-previous-haab-date . 1)
+ (spaceline-toggle-nyan-cat . 2)
+ (sudoku . 2)
+ (speed-type-text . 1)
+ (underline-region . 1)
+ (gotests-region . 31)
+ (rectangular-region-mode . 1)
 )

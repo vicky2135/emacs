@@ -1,8 +1,0 @@
-package todoDTO
-
-import "time"
-
-type CreateTodoRequest struct {
-	Task    string
-	DueDate time.Time
-}

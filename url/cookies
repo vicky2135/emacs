@@ -1,0 +1,14 @@
+;; Emacs-W3 HTTP cookies file
+;; Automatically generated file!!! DO NOT EDIT!!!
+
+(setq url-cookie-storage
+ '((".gutenberg.org"
+  [url-cookie "session_id" "7157c7c7902e2238f7010c4c85628f55bb548134" "Tue, 19 Jun 2018 11:28:48 GMT" "/" ".gutenberg.org" nil]))
+)
+(setq url-cookie-secure-storage
+ 'nil)
+
+;; Local Variables:
+;; version-control: never
+;; no-byte-compile: t
+;; End:
